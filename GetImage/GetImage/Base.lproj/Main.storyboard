@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="joe-fO-WlW">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <scenes>
+        <!--Tab Bar Controller-->
+        <scene sceneID="qlq-6b-LB4">
+            <objects>
+                <tabBarController id="joe-fO-WlW" sceneMemberID="viewController">
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="1xA-sL-Ut8">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="kk9-Bv-Bdm" kind="relationship" relationship="viewControllers" id="3ZN-uo-KSk"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="tze-dp-fDM"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3yU-5f-Kme" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-114" y="-237"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="GetImage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pbg-B0-aOC">
+                                <rect key="frame" x="40" y="73" width="240" height="193"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CZG-PH-Obb">
+                                <rect key="frame" x="131" y="314" width="59" height="30"/>
+                                <state key="normal" title="Connect"/>
+                                <connections>
+                                    <action selector="connectImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqk-N0-jYh"/>
+                                </connections>
+                            </button>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="3PU-37-ofz">
+                                <rect key="frame" x="18" y="400" width="284" height="31"/>
+                                <connections>
+                                    <action selector="changeValueSlider:" destination="BYZ-38-t0r" eventType="valueChanged" id="pJb-iN-P2i"/>
+                                </connections>
+                            </slider>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" systemItem="favorites" id="EHQ-g7-XGi" userLabel="scrollview"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="image" destination="Pbg-B0-aOC" id="hUu-9I-6Mw"/>
+                        <outlet property="slider" destination="3PU-37-ofz" id="4rC-na-cL9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="316" y="149"/>
+        </scene>
+        <!--Scroll View Controller-->
+        <scene sceneID="maE-xO-KLs">
+            <objects>
+                <viewController id="kk9-Bv-Bdm" customClass="ScrollViewController" customModule="GetImage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pp4-qQ-ALT"/>
+                        <viewControllerLayoutGuide type="bottom" id="Y7N-8d-zcz"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UVw-Ac-Y9J">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mj4-Ey-HaR">
+                                <rect key="frame" x="108" y="80" width="218" height="210"/>
+                                <connections>
+                                    <outlet property="delegate" destination="kk9-Bv-Bdm" id="2vN-kC-OyV"/>
+                                </connections>
+                            </scrollView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xvq-aS-dHi">
+                                <rect key="frame" x="0.0" y="80" width="100" height="210"/>
+                            </scrollView>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E8R-si-lxH">
+                                <rect key="frame" x="128" y="360" width="51" height="31"/>
+                                <connections>
+                                    <action selector="switchImage:" destination="kk9-Bv-Bdm" eventType="valueChanged" id="1Py-eF-FES"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AEu-CR-1Mr">
+                                <rect key="frame" x="81" y="298" width="155" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cs5-6i-Gb2">
+                                <rect key="frame" x="334" y="80" width="80" height="210"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" systemItem="history" id="UA7-lr-fO5"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="changValue" destination="E8R-si-lxH" id="aox-lC-kO5"/>
+                        <outlet property="imagesScrollView" destination="mj4-Ey-HaR" id="vry-Rc-ihB"/>
+                        <outlet property="leftScroll" destination="xvq-aS-dHi" id="7zq-5w-mwE"/>
+                        <outlet property="rightLeft" destination="cs5-6i-Gb2" id="10u-Sr-X6w"/>
+                        <outlet property="stateSwichLabel" destination="AEu-CR-1Mr" id="s8M-hu-Q5d"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hzg-ac-szE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="356" y="-456"/>
+        </scene>
+    </scenes>
+</document>
