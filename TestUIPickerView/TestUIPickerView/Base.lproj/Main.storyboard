@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="595-P6-omQ">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Picker-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController title="Picker" id="BYZ-38-t0r" customClass="ViewController" customModule="TestUIPickerView" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nSH-qD-G10">
+                                <rect key="frame" x="0.0" y="148" width="320" height="216"/>
+                            </pickerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="Z09-XD-6mw"/>
+                    <connections>
+                        <outlet property="pickerView" destination="nSH-qD-G10" id="aia-b7-QRN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1024" y="136"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="Sxr-d8-E95">
+            <objects>
+                <viewController id="ypF-G5-g7A" customClass="DatePickerViewController" customModule="TestUIPickerView" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="V1H-ie-zgX"/>
+                        <viewControllerLayoutGuide type="bottom" id="mcF-b0-V5j"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Tiv-wZ-XFj">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZeI-k1-8Bo">
+                                <rect key="frame" x="131" y="370" width="63" height="30"/>
+                                <color key="backgroundColor" red="0.99357820679999997" green="0.99357820679999997" blue="0.99357820679999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Seen">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="seenTime:" destination="ypF-G5-g7A" eventType="touchUpInside" id="u4R-Wp-O0b"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="244-cw-CLg">
+                                <rect key="frame" x="8" y="43" width="302" height="33"/>
+                                <color key="backgroundColor" red="0.79780911939999999" green="1" blue="0.86921493189999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="igz-JB-MVD">
+                                <rect key="frame" x="0.0" y="90" width="320" height="216"/>
+                                <date key="date" timeIntervalSinceReferenceDate="480943653.72657901">
+                                    <!--2016-03-29 11:27:33 +0000-->
+                                </date>
+                            </datePicker>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="h9a-Pv-maK"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="datePickerView" destination="igz-JB-MVD" id="Dkc-ii-Uv7"/>
+                        <outlet property="timeLabel" destination="244-cw-CLg" id="IOd-yj-V2B"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Gl-hj-sdm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="721" y="708"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="89r-Hn-GMH">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="595-P6-omQ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="PJ5-m3-Hi2">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="1OI-JE-0Zv"/>
+                        <segue destination="ypF-G5-g7A" kind="relationship" relationship="viewControllers" id="D1a-4j-vfZ"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="THF-TA-QPA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="433" y="269"/>
+        </scene>
+    </scenes>
+</document>
