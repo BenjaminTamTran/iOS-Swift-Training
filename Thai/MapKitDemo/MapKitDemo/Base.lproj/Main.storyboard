@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MapKitDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="AuV-Bh-jbE">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="1Ik-LY-0lM" appends="YES" id="jWp-cI-07a"/>
+                                </connections>
+                            </mapView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jWW-Ru-F6P">
+                                <rect key="frame" x="57" y="565" width="281" height="29"/>
+                                <segments>
+                                    <segment title="standard"/>
+                                    <segment title="Second"/>
+                                    <segment title="Hybrid"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentedControlChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="P9n-Cu-DFn"/>
+                                </connections>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eGn-Ch-hQF">
+                                <rect key="frame" x="31" y="617" width="163" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="show traffic"/>
+                                <connections>
+                                    <action selector="showTraffic:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9yr-p4-Iav"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bEc-XX-Zdi">
+                                <rect key="frame" x="225" y="617" width="130" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="show Compass"/>
+                                <connections>
+                                    <action selector="showCompass:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GOX-Wy-gUC"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="AuV-Bh-jbE" secondAttribute="trailing" id="88e-sN-mhV"/>
+                            <constraint firstItem="AuV-Bh-jbE" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="F5h-wD-OWf"/>
+                            <constraint firstItem="AuV-Bh-jbE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Iqd-IQ-Hy8"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="AuV-Bh-jbE" secondAttribute="bottom" id="Qcr-J8-0rJ"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="mapView" destination="AuV-Bh-jbE" id="vKi-Gd-r5D"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="1Ik-LY-0lM">
+                    <connections>
+                        <action selector="longPressGestureRecognizer:" destination="BYZ-38-t0r" id="iee-CS-3We"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="220.5" y="339.5"/>
+        </scene>
+    </scenes>
+</document>
