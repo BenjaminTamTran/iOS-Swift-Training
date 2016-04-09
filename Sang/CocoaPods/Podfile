@@ -1,0 +1,12 @@
+
+platform :ios, '8.0'
+use_frameworks!
+
+target 'CocaPods' do
+	pod 'Appirater'
+	pod 'RFAboutView-Swift'
+	pod 'AutocompleteField', '~> 1.1'
+	pod 'Font-Awesome-Swift'
+	pod 'SwiftAddressBook'
+end
+

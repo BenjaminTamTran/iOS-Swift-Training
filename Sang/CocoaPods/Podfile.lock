@@ -1,0 +1,22 @@
+PODS:
+  - Appirater (2.0.5)
+  - AutocompleteField (1.1)
+  - Font-Awesome-Swift (1.4.6)
+  - RFAboutView-Swift (1.0.10)
+  - SwiftAddressBook (0.6.2)
+
+DEPENDENCIES:
+  - Appirater
+  - AutocompleteField (~> 1.1)
+  - Font-Awesome-Swift
+  - RFAboutView-Swift
+  - SwiftAddressBook
+
+SPEC CHECKSUMS:
+  Appirater: e7c0a47fb67ee5041ce8479e6ba960927fb40264
+  AutocompleteField: 212b36bef0218f22c05d80035be2d382acd5a4e2
+  Font-Awesome-Swift: a965c23e619514be65de9b113f49038ca683c1bb
+  RFAboutView-Swift: 2a83f732b4104fdbb6cab3f4713763bda23eaf35
+  SwiftAddressBook: 88c68c6bd0c6a9cb10e5cdc80f91fd87b5e0f4ec
+
+COCOAPODS: 0.39.0
