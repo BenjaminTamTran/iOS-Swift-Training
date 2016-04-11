@@ -14,6 +14,10 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
     var placePicker: GMSPlacePicker?
     @IBOutlet var favoritePlace: BFPaperButton!
     @IBOutlet var searchPlaceButton: BFPaperButton!
+    @IBOutlet var addMorePicture: BFPaperButton!
+    @IBOutlet var addPlaceDate: BFPaperButton!
+    @IBOutlet var saveInfor: BFPaperButton!
+    
     @IBOutlet var placeLabel: UILabel!
     var test: Bool?
     @IBOutlet var imageView: UIImageView!
@@ -21,26 +25,8 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
         super.viewDidLoad()
         searchPlace()
         // Mark custom Button 
-        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        favoritePlace.backgroundColor = UIColor(red: 1, green: 0, blue: 0.1, alpha: 0.5)
-        favoritePlace.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
-        favoritePlace.isRaised = true
-        favoritePlace.cornerRadius = favoritePlace.frame.size.width / 2
-        favoritePlace.rippleFromTapLocation = false
-        favoritePlace.rippleBeyondBounds = true
-        favoritePlace.addTarget(self, action: #selector(ViewController.showDatePicker), forControlEvents: .TouchUpInside)
-        
-        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        searchPlaceButton.backgroundColor = UIColor(red: 0.3, green: 0, blue: 1, alpha: 1)
-        searchPlaceButton.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
-        searchPlaceButton.isRaised = true
-        searchPlaceButton.cornerRadius = favoritePlace.frame.size.width / 2
-        searchPlaceButton.rippleFromTapLocation = false
-        searchPlaceButton.rippleBeyondBounds = true
-        searchPlaceButton.addTarget(self, action: #selector(ViewController.searchPlace), forControlEvents: .TouchUpInside)
-        //set image 
+        setButton()
+        //set image
         imageView.image = UIImage(named: "cover")
         test = false
     }
@@ -64,8 +50,10 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
                 print("Place address \(place.formattedAddress)")
                 print("Place attributions \(place.attributions)")
                 self.loadFirstPhotoForPlace(place.placeID)
+                self.test = true
             } else {
                 self.placeLabel.text = "No place selected"
+                self.test = false
             }
         })
     }
@@ -96,13 +84,11 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
             } else {
                 if let firstPhoto = photos?.results.first {
                     self.loadImageForMetadata(firstPhoto)
-                    self.test = true
                 }
                 else {
                     let alert = UIAlertController(title: "Search Image", message: "Don't have image for this place", preferredStyle: .Alert)
                     let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
                     alert.addAction(action)
-                    self.test = false
                     self.presentViewController(alert, animated: true, completion: nil)
                     self.imageView.image = UIImage(named: "cover")
                 }
@@ -125,5 +111,43 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
         }
     }
 
+    // set button 
+    func setButton(){
+        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        favoritePlace.backgroundColor = UIColor(red: 1, green: 0, blue: 0.1, alpha: 0.5)
+        favoritePlace.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
+        favoritePlace.isRaised = true
+        favoritePlace.cornerRadius = favoritePlace.frame.size.width / 2
+        favoritePlace.rippleFromTapLocation = false
+        favoritePlace.rippleBeyondBounds = true
+        
+        
+        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        searchPlaceButton.backgroundColor = UIColor(red: 0.3, green: 0, blue: 1, alpha: 1)
+        searchPlaceButton.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
+        searchPlaceButton.isRaised = true
+        searchPlaceButton.cornerRadius = favoritePlace.frame.size.width / 2
+        searchPlaceButton.rippleFromTapLocation = false
+        searchPlaceButton.rippleBeyondBounds = true
+        searchPlaceButton.addTarget(self, action: #selector(ViewController.searchPlace), forControlEvents: .TouchUpInside)
+        
+        addMorePicture.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.1, alpha: 0.3)
+        addMorePicture.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        addMorePicture.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        
+        addPlaceDate.backgroundColor = UIColor(red: 0.8, green: 0.1, blue: 0.7, alpha: 0.3)
+        addPlaceDate.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        addPlaceDate.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        addPlaceDate.addTarget(self, action: #selector(ViewController.showDatePicker), forControlEvents: .TouchUpInside)
+        
+        saveInfor.cornerRadius = favoritePlace.frame.size.width / 2
+        saveInfor.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        saveInfor.backgroundColor = UIColor(red: 0.8, green: 0.6, blue: 0.7, alpha: 0.3)
+        saveInfor.rippleFromTapLocation = false
+        
+    }
+    
 }
 
