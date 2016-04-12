@@ -24,7 +24,6 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchPlace()
-        // Mark custom Button 
         setButton()
         //set image
         imageView.image = UIImage(named: "cover")
@@ -44,7 +43,6 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
                 print("Pick Place error: \(error.localizedDescription)")
                 return
             }
-            
             if let place = place {
                 self.placeLabel.text = place.name
                 print("Place address \(place.formattedAddress)")
@@ -106,7 +104,6 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
 
                                 } else {
                                     self.imageView.image = photo;
-                                 //   self.attributionTextView.attributedText = photoMetadata.attributions;
                                 }
         }
     }
