@@ -7,5 +7,6 @@ target 'Mini-Project' do
 pod 'BFPaperButton'
 pod 'HSDatePickerViewController'
 pod 'GoogleMaps'
+pod 'BSImagePicker'
 end
 

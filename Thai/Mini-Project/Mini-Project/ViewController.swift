@@ -7,9 +7,14 @@
 //
 
 import UIKit
+import Photos
+
+import BSImagePicker
 import GoogleMaps
 import BFPaperButton
 import HSDatePickerViewController
+
+
 class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
     var placePicker: GMSPlacePicker?
     @IBOutlet var favoritePlace: BFPaperButton!
@@ -20,7 +25,11 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
     
     @IBOutlet var placeLabel: UILabel!
     var test: Bool?
+    var selectedImages = [UIImage]()
+    var imageNames = [String]()
     @IBOutlet var imageView: UIImageView!
+    @IBOutlet weak var stackImagePicked: UIStackView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchPlace()
@@ -28,6 +37,16 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
         //set image
         imageView.image = UIImage(named: "cover")
         test = false
+        initStackView()
+    }
+    
+    func initStackView() {
+        self.stackImagePicked.axis = .Horizontal
+        self.stackImagePicked.distribution = .FillEqually
+        self.stackImagePicked.alignment = .Fill
+        self.stackImagePicked.spacing = 10
+        self.stackImagePicked.translatesAutoresizingMaskIntoConstraints = false
+        
     }
     
     func searchPlace() {
@@ -49,9 +68,12 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
                 print("Place attributions \(place.attributions)")
                 self.loadFirstPhotoForPlace(place.placeID)
                 self.test = true
+                self.addMorePicture.enabled = true
             } else {
                 self.placeLabel.text = "No place selected"
                 self.test = false
+                self.addMorePicture.enabled = false
+                self.clearStackView()
             }
         })
     }
@@ -146,5 +168,98 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
         
     }
     
+    //# MARK: - remove all sub view from stack view
+    func clearStackView() {
+        for view in self.stackImagePicked.arrangedSubviews {
+            view.removeFromSuperview()
+        }
+    }
+    
+    //# MARK: -Action when touch up inside AddMorePicture button
+    @IBAction func addMorePicsAction(sender: AnyObject) {
+        let vc = BSImagePickerViewController()
+        //customsize the ImagePicker
+        vc.maxNumberOfSelections = 6
+        vc.albumButton.tintColor = UIColor.greenColor()
+        vc.cancelButton.tintColor = UIColor.redColor()
+        vc.doneButton.tintColor = UIColor.purpleColor()
+        vc.selectionCharacter = "✓"
+        vc.selectionFillColor = UIColor.grayColor()
+        vc.selectionStrokeColor = UIColor.yellowColor()
+        vc.selectionShadowColor = UIColor.redColor()
+        vc.selectionTextAttributes[NSForegroundColorAttributeName] = UIColor.lightGrayColor()
+        vc.cellsPerRow = {(verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int in
+            switch (verticalSize, horizontalSize) {
+            case (.Compact, .Regular): // iPhone5-6 portrait
+                return 2
+            case (.Compact, .Compact): // iPhone5-6 landscape
+                return 2
+            case (.Regular, .Regular): // iPad portrait/landscape
+                return 3
+            default:
+                return 2
+            }
+        }
+       
+        bs_presentImagePickerController(vc, animated: true,
+                                        select: { (asset: PHAsset) -> Void in
+            }, deselect: { (asset: PHAsset) -> Void in//action when deselect
+            }, cancel: { (assets: [PHAsset]) -> Void in//action when cancel
+            }, finish: { (assets: [PHAsset]) -> Void in//action when finish
+                self.selectedImages.removeAll()
+                self.imageNames.removeAll()
+                self.clearStackView()
+                // get all selected image into [UIImage] em lam bieng tach ham
+                for asset in assets {
+                    let name = asset.originalFilename
+                    self.imageNames.append(name!)
+                    let manager = PHImageManager.defaultManager()
+                    let option = PHImageRequestOptions()
+                    var image = UIImage()
+                    option.synchronous = true
+                    manager.requestImageForAsset(asset, targetSize: CGSize(width: 30.0, height: 30.0), contentMode: .AspectFit, options: option, resultHandler: {(result, info)->Void in
+                    image = result!
+                    self.selectedImages.append(image)
+                    })
+                }
+                for var i in 0 ... self.selectedImages.count-1 {//set imageview into stackImage
+                    let imgView:UIImageView = UIImageView()
+                    imgView.contentMode = UIViewContentMode.ScaleAspectFit
+                    imgView.image = self.selectedImages[i]
+                    self.stackImagePicked.addArrangedSubview(imgView)
+                }
+                self.view.addSubview(self.stackImagePicked)
+                }, completion: nil)
+    }
+    
+    //#MARK: Event save touch up inside
+    @IBAction func saveEventAction(sender: AnyObject) {
+        for name in imageNames {
+            print("abc: \(name)")
+        }
+    }
+    
 }
 
+
+extension PHAsset {
+    
+    var originalFilename: String? {
+        
+        var fname:String?
+        
+        if #available(iOS 9.0, *) {
+            let resources = PHAssetResource.assetResourcesForAsset(self)
+            if let resource = resources.first {
+                fname = resource.originalFilename
+            }
+        }
+        
+        if fname == nil {
+            // this is an undocumented workaround that works as of iOS 9.1
+            fname = self.valueForKey("filename") as? String
+        }
+        
+        return fname
+    }
+}
