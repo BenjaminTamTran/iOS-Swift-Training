@@ -8,5 +8,6 @@ pod 'BFPaperButton'
 pod 'HSDatePickerViewController'
 pod 'GoogleMaps'
 pod 'BSImagePicker'
+pod 'SwiftyDropbox'
 end
 

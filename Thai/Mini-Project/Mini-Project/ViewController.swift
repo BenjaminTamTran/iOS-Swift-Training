@@ -13,8 +13,7 @@ import BSImagePicker
 import GoogleMaps
 import BFPaperButton
 import HSDatePickerViewController
-
-
+import SwiftyDropbox
 class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
     var placePicker: GMSPlacePicker?
     @IBOutlet var favoritePlace: BFPaperButton!
@@ -22,32 +21,36 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
     @IBOutlet var addMorePicture: BFPaperButton!
     @IBOutlet var addPlaceDate: BFPaperButton!
     @IBOutlet var saveInfor: BFPaperButton!
+    @IBOutlet var imagesScrollView: UIScrollView!
     
     @IBOutlet var placeLabel: UILabel!
     var test: Bool?
     var selectedImages = [UIImage]()
     var imageNames = [String]()
+    var favorite: Bool?
     @IBOutlet var imageView: UIImageView!
-    @IBOutlet weak var stackImagePicked: UIStackView!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchPlace()
         setButton()
         //set image
         imageView.image = UIImage(named: "cover")
-        test = false
-        initStackView()
+//        initStackView()
+//         status button when no search
+        saveInfor.enabled = false
+        addMorePicture.enabled = false
+        addPlaceDate.enabled = false
+        favorite = false
     }
     
-    func initStackView() {
-        self.stackImagePicked.axis = .Horizontal
-        self.stackImagePicked.distribution = .FillEqually
-        self.stackImagePicked.alignment = .Fill
-        self.stackImagePicked.spacing = 10
-        self.stackImagePicked.translatesAutoresizingMaskIntoConstraints = false
-        
-    }
+//    func initStackView() {
+//        self.stackImagePicked.axis = .Horizontal
+//        self.stackImagePicked.distribution = .FillEqually
+//        self.stackImagePicked.alignment = .Fill
+//        self.stackImagePicked.spacing = 10
+//        self.stackImagePicked.translatesAutoresizingMaskIntoConstraints = false
+//    }
     
     func searchPlace() {
         let center = CLLocationCoordinate2DMake(10.762689, 106.68234)
@@ -67,25 +70,25 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
                 print("Place address \(place.formattedAddress)")
                 print("Place attributions \(place.attributions)")
                 self.loadFirstPhotoForPlace(place.placeID)
-                self.test = true
                 self.addMorePicture.enabled = true
+                self.saveInfor.enabled = true
+                self.addPlaceDate.enabled = true
             } else {
                 self.placeLabel.text = "No place selected"
-                self.test = false
                 self.addMorePicture.enabled = false
-                self.clearStackView()
+                self.clearScrollView()
+                self.saveInfor.enabled = false
+                self.addPlaceDate.enabled = false
             }
         })
     }
     
 
     func showDatePicker() {
-        if test == true {
         let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
         hsdpvc.mainColor = UIColor.yellowColor()
         hsdpvc.delegate = self
         self.presentViewController(hsdpvc, animated: true, completion: { _ in })
-        }
     }
     
     func hsDatePickerPickedDate(date: NSDate!) {
@@ -168,9 +171,9 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
         
     }
     
-    //# MARK: - remove all sub view from stack view
-    func clearStackView() {
-        for view in self.stackImagePicked.arrangedSubviews {
+    //# MARK: - remove all sub view from scroll view
+    func clearScrollView() {
+        for view in self.imagesScrollView.subviews {
             view.removeFromSuperview()
         }
     }
@@ -200,7 +203,7 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
                 return 2
             }
         }
-       
+        
         bs_presentImagePickerController(vc, animated: true,
                                         select: { (asset: PHAsset) -> Void in
             }, deselect: { (asset: PHAsset) -> Void in//action when deselect
@@ -208,8 +211,9 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
             }, finish: { (assets: [PHAsset]) -> Void in//action when finish
                 self.selectedImages.removeAll()
                 self.imageNames.removeAll()
-                self.clearStackView()
-                // get all selected image into [UIImage] em lam bieng tach ham
+                self.clearScrollView()
+                var xCoordinate: CGFloat = 10
+
                 for asset in assets {
                     let name = asset.originalFilename
                     self.imageNames.append(name!)
@@ -217,28 +221,41 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
                     let option = PHImageRequestOptions()
                     var image = UIImage()
                     option.synchronous = true
-                    manager.requestImageForAsset(asset, targetSize: CGSize(width: 30.0, height: 30.0), contentMode: .AspectFit, options: option, resultHandler: {(result, info)->Void in
-                    image = result!
-                    self.selectedImages.append(image)
+                    manager.requestImageForAsset(asset, targetSize: CGSize(width: 1080.0, height: 720.0), contentMode: .AspectFit, options: option, resultHandler: {(result, info)->Void in
+                        image = result!
+                        self.selectedImages.append(image)
                     })
+                    let imageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
+                    imageView.image = image
+                    imageView.contentMode = UIViewContentMode.ScaleAspectFit
+                    self.imagesScrollView.addSubview(imageView)
+                    xCoordinate += self.imagesScrollView.frame.width
+                    
                 }
-                for var i in 0 ... self.selectedImages.count-1 {//set imageview into stackImage
-                    let imgView:UIImageView = UIImageView()
-                    imgView.contentMode = UIViewContentMode.ScaleAspectFit
-                    imgView.image = self.selectedImages[i]
-                    self.stackImagePicked.addArrangedSubview(imgView)
-                }
-                self.view.addSubview(self.stackImagePicked)
-                }, completion: nil)
+                var contentSize = self.imagesScrollView.contentSize
+                let width = CGFloat(self.imageNames.count)
+                contentSize.width = width * self.imagesScrollView.frame.width
+                self.imagesScrollView.contentSize = contentSize
+                let scrollPoint = CGPointMake(0.0, 0.0)
+                self.imagesScrollView.setContentOffset(scrollPoint, animated: true)
+            }, completion: nil)
     }
     
     //#MARK: Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
-        for name in imageNames {
-            print("abc: \(name)")
+        if let client = Dropbox.authorizedClient {
+            for i in 0 ... selectedImages.count - 1 {
+                let fileData = UIImageJPEGRepresentation(selectedImages[i], 1)
+                client.files.upload(path: "/\(imageNames[i])", body: fileData!)
+            }
+        }
+        else {
+            Dropbox.authorizeFromController(self)
         }
     }
-    
+    @IBAction func favoriteAction(sender: AnyObject) {
+        favorite = true
+    }
 }
 
 
