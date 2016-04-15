@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0BC9542EF48230C149576AEC /* Pods_Mini_Project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7509F4C34014F2F60FD989B4 /* Pods_Mini_Project.framework */; };
+		D03DF82E1CBFD21300E77401 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DF82D1CBFD21300E77401 /* Place.swift */; };
 		D0BCD7CA1CBB456500931420 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCD7C91CBB456500931420 /* AppDelegate.swift */; };
 		D0BCD7CC1CBB456500931420 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCD7CB1CBB456500931420 /* ViewController.swift */; };
 		D0BCD7CF1CBB456500931420 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BCD7CD1CBB456500931420 /* Main.storyboard */; };
@@ -15,11 +16,13 @@
 		D0BCD7D41CBB456500931420 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0BCD7D31CBB456500931420 /* Assets.xcassets */; };
 		D0BCD7D71CBB456500931420 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BCD7D51CBB456500931420 /* LaunchScreen.storyboard */; };
 		D0CDC11A1CBBE26A00651C5D /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CDC1191CBBE26A00651C5D /* FavoriteViewController.swift */; };
+		D0DDDEA81CC11DD600FB0307 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDDEA71CC11DD600FB0307 /* HistoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		263551295809A28086669A03 /* Pods-Mini-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mini-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mini-Project/Pods-Mini-Project.debug.xcconfig"; sourceTree = "<group>"; };
 		7509F4C34014F2F60FD989B4 /* Pods_Mini_Project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mini_Project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D03DF82D1CBFD21300E77401 /* Place.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		D0BCD7C61CBB456500931420 /* Mini-Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mini-Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BCD7C91CBB456500931420 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0BCD7CB1CBB456500931420 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -29,6 +32,7 @@
 		D0BCD7D61CBB456500931420 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D0BCD7D81CBB456500931420 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0CDC1191CBBE26A00651C5D /* FavoriteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		D0DDDEA71CC11DD600FB0307 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		DC0CC7AC465E448BCA44458B /* Pods-Mini-Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mini-Project.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mini-Project/Pods-Mini-Project.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,11 +89,13 @@
 				D0BCD7C91CBB456500931420 /* AppDelegate.swift */,
 				D0BCD7CB1CBB456500931420 /* ViewController.swift */,
 				D0BCD7CD1CBB456500931420 /* Main.storyboard */,
+				D0DDDEA71CC11DD600FB0307 /* HistoryViewController.swift */,
 				D0CDC1191CBBE26A00651C5D /* FavoriteViewController.swift */,
 				D0BCD7D31CBB456500931420 /* Assets.xcassets */,
 				D0BCD7D51CBB456500931420 /* LaunchScreen.storyboard */,
 				D0BCD7D81CBB456500931420 /* Info.plist */,
 				D0BCD7D01CBB456500931420 /* Mini_Project.xcdatamodeld */,
+				D03DF82D1CBFD21300E77401 /* Place.swift */,
 			);
 			path = "Mini-Project";
 			sourceTree = "<group>";
@@ -236,7 +242,9 @@
 				D0BCD7CC1CBB456500931420 /* ViewController.swift in Sources */,
 				D0BCD7D21CBB456500931420 /* Mini_Project.xcdatamodeld in Sources */,
 				D0CDC11A1CBBE26A00651C5D /* FavoriteViewController.swift in Sources */,
+				D0DDDEA81CC11DD600FB0307 /* HistoryViewController.swift in Sources */,
 				D0BCD7CA1CBB456500931420 /* AppDelegate.swift in Sources */,
+				D03DF82E1CBFD21300E77401 /* Place.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

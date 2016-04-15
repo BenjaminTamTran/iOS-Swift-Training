@@ -28,6 +28,11 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
     var selectedImages = [UIImage]()
     var imageNames = [String]()
     var favorite: Bool?
+    var dateVisit: NSDate?
+    var namePlace: String?
+    var addressPlace: String?
+    var places = [Place]()
+    var nameImagesData = [String]()
     @IBOutlet var imageView: UIImageView!
 
     
@@ -69,6 +74,8 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
                 self.placeLabel.text = place.name
                 print("Place address \(place.formattedAddress)")
                 print("Place attributions \(place.attributions)")
+                self.namePlace = place.name
+                self.addressPlace = place.formattedAddress!
                 self.loadFirstPhotoForPlace(place.placeID)
                 self.addMorePicture.enabled = true
                 self.saveInfor.enabled = true
@@ -92,9 +99,7 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
     }
     
     func hsDatePickerPickedDate(date: NSDate!) {
-        let dateFormat = NSDateFormatter()
-        dateFormat.dateFormat = "hh:mm:ss"
-        
+       dateVisit = date
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -209,53 +214,71 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
             }, deselect: { (asset: PHAsset) -> Void in//action when deselect
             }, cancel: { (assets: [PHAsset]) -> Void in//action when cancel
             }, finish: { (assets: [PHAsset]) -> Void in//action when finish
-                self.selectedImages.removeAll()
-                self.imageNames.removeAll()
-                self.clearScrollView()
-                var xCoordinate: CGFloat = 10
-
-                for asset in assets {
-                    let name = asset.originalFilename
-                    self.imageNames.append(name!)
-                    let manager = PHImageManager.defaultManager()
-                    let option = PHImageRequestOptions()
-                    var image = UIImage()
-                    option.synchronous = true
-                    manager.requestImageForAsset(asset, targetSize: CGSize(width: 1080.0, height: 720.0), contentMode: .AspectFit, options: option, resultHandler: {(result, info)->Void in
-                        image = result!
-                        self.selectedImages.append(image)
-                    })
-                    let imageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
-                    imageView.image = image
-                    imageView.contentMode = UIViewContentMode.ScaleAspectFit
-                    self.imagesScrollView.addSubview(imageView)
-                    xCoordinate += self.imagesScrollView.frame.width
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.selectedImages.removeAll()
+                    self.imageNames.removeAll()
+                    self.nameImagesData.removeAll()
+                    self.clearScrollView()
+                    var xCoordinate: CGFloat = 10
                     
-                }
-                var contentSize = self.imagesScrollView.contentSize
-                let width = CGFloat(self.imageNames.count)
-                contentSize.width = width * self.imagesScrollView.frame.width
-                self.imagesScrollView.contentSize = contentSize
-                let scrollPoint = CGPointMake(0.0, 0.0)
-                self.imagesScrollView.setContentOffset(scrollPoint, animated: true)
+                    for asset in assets {
+                        let name = asset.originalFilename
+                        self.imageNames.append(name!)
+                        let manager = PHImageManager.defaultManager()
+                        let option = PHImageRequestOptions()
+                        var image = UIImage()
+                        option.synchronous = true
+                        manager.requestImageForAsset(asset, targetSize: CGSize(width: 1080.0, height: 720.0), contentMode: .AspectFit, options: option, resultHandler: {(result, info)->Void in
+                            image = result!
+                            self.selectedImages.append(image)
+                        })
+                        let imageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
+                        imageView.image = image
+                        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+                        self.imagesScrollView.addSubview(imageView)
+                        xCoordinate += self.imagesScrollView.frame.width
+                        
+                    }
+                    var contentSize = self.imagesScrollView.contentSize
+                    let width = CGFloat(self.imageNames.count)
+                    contentSize.width = width * self.imagesScrollView.frame.width
+                    self.imagesScrollView.contentSize = contentSize
+                    let scrollPoint = CGPointMake(0.0, 0.0)
+                    self.imagesScrollView.setContentOffset(scrollPoint, animated: true)
+                })
+                
             }, completion: nil)
     }
     
     //#MARK: Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
-        if let client = Dropbox.authorizedClient {
-            for i in 0 ... selectedImages.count - 1 {
-                let fileData = UIImageJPEGRepresentation(selectedImages[i], 1)
-                client.files.upload(path: "/\(imageNames[i])", body: fileData!)
+        let currentDate = String(NSDate().timeIntervalSince1970)
+        let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
+            if let client = Dropbox.authorizedClient {
+                for i in 0 ... self.selectedImages.count - 1 {
+                    let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
+                     client.files.upload(path: "/\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])", body: fileData!)
+                    let nameImageData = "\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])"
+                    print("\(nameImageData)")
+                    let plainData = (nameImageData as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+                    let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+                    self.nameImagesData.append(base64String)
+                }
+                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                let managedObjectContext = appDelegate.managedObjectContext
+                Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!)
+                appDelegate.saveContext()
+        
             }
-        }
-        else {
-            Dropbox.authorizeFromController(self)
-        }
+            else {
+                   Dropbox.authorizeFromController(self)
+            }
     }
+    
     @IBAction func favoriteAction(sender: AnyObject) {
         favorite = true
     }
+    
 }
 
 

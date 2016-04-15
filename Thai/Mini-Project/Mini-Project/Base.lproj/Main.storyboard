@@ -18,6 +18,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="WIz-be-xGd"/>
                         <segue destination="qqD-yc-cpq" kind="relationship" relationship="viewControllers" id="Zcn-cF-3Dv"/>
+                        <segue destination="1r5-fi-y9K" kind="relationship" relationship="viewControllers" id="uEg-gL-hke"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ng6-Kw-o25" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -213,11 +214,61 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hps-lA-86Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-555.5" y="616.5"/>
+            <point key="canvasLocation" x="-1055.5" y="652.5"/>
+        </scene>
+        <!--History-->
+        <scene sceneID="FTX-7b-o08">
+            <objects>
+                <viewController id="1r5-fi-y9K" customClass="HistoryViewController" customModule="Mini_Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LpQ-IK-psr"/>
+                        <viewControllerLayoutGuide type="bottom" id="zpA-xr-7jJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="r1r-pZ-zAQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gGw-Nl-y9H">
+                                <rect key="frame" x="0.0" y="50" width="375" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="rvc-el-Y6V">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rvc-el-Y6V" id="EoY-l5-ft2">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="1r5-fi-y9K" id="Vg1-Vy-hog"/>
+                                    <outlet property="delegate" destination="1r5-fi-y9K" id="cK3-7p-hri"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gGw-Nl-y9H" firstAttribute="leading" secondItem="r1r-pZ-zAQ" secondAttribute="leading" id="BZQ-cc-ZGp"/>
+                            <constraint firstItem="gGw-Nl-y9H" firstAttribute="top" secondItem="LpQ-IK-psr" secondAttribute="bottom" constant="30" id="gnK-5V-wsU"/>
+                            <constraint firstAttribute="trailing" secondItem="gGw-Nl-y9H" secondAttribute="trailing" id="mCo-ro-KPT"/>
+                            <constraint firstItem="zpA-xr-7jJ" firstAttribute="top" secondItem="gGw-Nl-y9H" secondAttribute="bottom" id="uk8-ie-qzp"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="History" image="history" id="fUF-1a-wlP"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="historyTableView" destination="gGw-Nl-y9H" id="8d5-IB-Py7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xgd-tb-K50" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-595.5" y="652.5"/>
         </scene>
     </scenes>
     <resources>
         <image name="favorite" width="40" height="40"/>
+        <image name="history" width="32" height="32"/>
         <image name="search" width="27" height="27"/>
     </resources>
 </document>
