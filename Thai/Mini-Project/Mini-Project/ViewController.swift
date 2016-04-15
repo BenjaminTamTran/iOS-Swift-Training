@@ -80,6 +80,7 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
                 self.addMorePicture.enabled = true
                 self.saveInfor.enabled = true
                 self.addPlaceDate.enabled = true
+                self.favorite = false
             } else {
                 self.placeLabel.text = "No place selected"
                 self.addMorePicture.enabled = false
