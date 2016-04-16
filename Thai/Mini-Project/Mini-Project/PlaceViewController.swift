@@ -15,16 +15,19 @@ import HSDatePickerViewController
 import SwiftyDropbox
 
 class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate {
-    var placePicker: GMSPlacePicker?
+    
+    // Mark: UI's elements
     @IBOutlet var favoritePlace: BFPaperButton!
     @IBOutlet var searchPlaceButton: BFPaperButton!
     @IBOutlet var addMorePicture: BFPaperButton!
     @IBOutlet var addPlaceDate: BFPaperButton!
     @IBOutlet var saveInfor: BFPaperButton!
     @IBOutlet var imagesScrollView: UIScrollView!
-    
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet var placeLabel: UILabel!
+    @IBOutlet var imageView: UIImageView!
+    
+    // Mark: Class's properties
     var test: Bool?
     var selectedImages = [UIImage]()
     var imageNames = [String]()
@@ -34,26 +37,40 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     var addressPlace: String?
     var places = [Place]()
     var nameImagesData = [String]()
-    @IBOutlet var imageView: UIImageView!
-
+    var placePicker: GMSPlacePicker?
     
+    // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initialize()
-        setButton()
-        //set image
-        imageView.image = UIImage(named: "cover")
+//        setButton()
 //        initStackView()
-//         status button when no search
-        saveInfor.enabled = false
-        addMorePicture.enabled = false
-        addPlaceDate.enabled = false
-        favorite = false
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     // Mark: class's private methods
     private func initialize() {
+        self.searchPlaceAction(self.view)
         backButton.setFAIcon(FAType.FAChevronLeft, forState: UIControlState.Normal)
+        saveInfor.setFAIcon(FAType.FASave, forState: .Normal)
+        favoritePlace.setFAIcon(FAType.FABookmarkO, forState: .Normal)
+        imageView.image = UIImage(named: "cover")
+        saveInfor.hidden = true
+        addMorePicture.hidden = true
+        addPlaceDate.hidden = true
+        favoritePlace.hidden = true
+        favorite = false
     }
     
 //    func initStackView() {
@@ -64,134 +81,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
 //        self.stackImagePicked.translatesAutoresizingMaskIntoConstraints = false
 //    }
     
-    func searchPlace() {
-        let center = CLLocationCoordinate2DMake(10.762689, 106.68234)
-        let northEast = CLLocationCoordinate2DMake(center.latitude + 0.001, center.longitude + 0.001)
-        let southWest = CLLocationCoordinate2DMake(center.latitude - 0.001, center.longitude - 0.001)
-        let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
-        let config = GMSPlacePickerConfig(viewport: viewport)
-        placePicker = GMSPlacePicker(config: config)
-        
-        placePicker?.pickPlaceWithCallback({ (place: GMSPlace?, error: NSError?) -> Void in
-            if let error = error {
-                print("Pick Place error: \(error.localizedDescription)")
-                return
-            }
-            if let place = place {
-                self.placeLabel.text = place.name
-                print("Place address \(place.formattedAddress)")
-                print("Place attributions \(place.attributions)")
-                self.namePlace = place.name
-                self.addressPlace = place.formattedAddress!
-                self.loadFirstPhotoForPlace(place.placeID)
-                self.addMorePicture.enabled = true
-                self.saveInfor.enabled = true
-                self.addPlaceDate.enabled = true
-                self.favorite = false
-            } else {
-                self.placeLabel.text = "No place selected"
-                self.addMorePicture.enabled = false
-                self.clearScrollView()
-                self.saveInfor.enabled = false
-                self.addPlaceDate.enabled = false
-            }
-        })
-    }
-    
-
-    func showDatePicker() {
-        let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
-        hsdpvc.mainColor = UIColor.yellowColor()
-        hsdpvc.delegate = self
-        self.presentViewController(hsdpvc, animated: true, completion: { _ in })
-    }
-    
-    func hsDatePickerPickedDate(date: NSDate!) {
-       dateVisit = date
-    }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    func loadFirstPhotoForPlace(placeID: String) {
-        GMSPlacesClient.sharedClient().lookUpPhotosForPlaceID(placeID) { (photos, error) -> Void in
-            if let error = error {
-                print("Error: \(error.description)")
-            } else {
-                if let firstPhoto = photos?.results.first {
-                    self.loadImageForMetadata(firstPhoto)
-                }
-                else {
-                    let alert = UIAlertController(title: "Search Image", message: "Don't have image for this place", preferredStyle: .Alert)
-                    let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
-                    alert.addAction(action)
-                    self.presentViewController(alert, animated: true, completion: nil)
-                    self.imageView.image = UIImage(named: "cover")
-                }
-            }
-        }
-    }
-    
-    func loadImageForMetadata(photoMetadata: GMSPlacePhotoMetadata) {
-        GMSPlacesClient.sharedClient()
-            .loadPlacePhoto(photoMetadata, constrainedToSize: imageView.bounds.size,
-                            scale: self.imageView.window!.screen.scale) { (photo, error) -> Void in
-                                if let error = error {
-                                    // TODO: handle the error.
-                                    print("Error: \(error.description)")
-
-                                } else {
-                                    self.imageView.image = photo;
-                                }
-        }
-    }
-
-    // set button 
-    func setButton(){
-        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        favoritePlace.backgroundColor = UIColor(red: 1, green: 0, blue: 0.1, alpha: 0.5)
-        favoritePlace.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
-        favoritePlace.isRaised = true
-        favoritePlace.cornerRadius = favoritePlace.frame.size.width / 2
-        favoritePlace.rippleFromTapLocation = false
-        favoritePlace.rippleBeyondBounds = true
-        
-        
-        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        searchPlaceButton.backgroundColor = UIColor(red: 0.3, green: 0, blue: 1, alpha: 1)
-        searchPlaceButton.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
-        searchPlaceButton.isRaised = true
-        searchPlaceButton.cornerRadius = favoritePlace.frame.size.width / 2
-        searchPlaceButton.rippleFromTapLocation = false
-        searchPlaceButton.rippleBeyondBounds = true
-        searchPlaceButton.addTarget(self, action: #selector(PlaceViewController.searchPlace), forControlEvents: .TouchUpInside)
-        
-        addMorePicture.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.1, alpha: 0.3)
-        addMorePicture.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        addMorePicture.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        
-        addPlaceDate.backgroundColor = UIColor(red: 0.8, green: 0.1, blue: 0.7, alpha: 0.3)
-        addPlaceDate.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        addPlaceDate.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        addPlaceDate.addTarget(self, action: #selector(PlaceViewController.showDatePicker), forControlEvents: .TouchUpInside)
-        
-        saveInfor.cornerRadius = favoritePlace.frame.size.width / 2
-        saveInfor.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        saveInfor.backgroundColor = UIColor(red: 0.8, green: 0.6, blue: 0.7, alpha: 0.3)
-        saveInfor.rippleFromTapLocation = false
-        
-    }
-    
-    //# MARK: - remove all sub view from scroll view
-    func clearScrollView() {
-        for view in self.imagesScrollView.subviews {
-            view.removeFromSuperview()
-        }
-    }
-    
-    //# MARK: -Action when touch up inside AddMorePicture button
+    // MARK: -Action when touch up inside
     @IBAction func addMorePicsAction(sender: AnyObject) {
         let vc = BSImagePickerViewController()
         //customsize the ImagePicker
@@ -258,29 +148,29 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
             }, completion: nil)
     }
     
-    //#MARK: Event save touch up inside
+    //Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
         let currentDate = String(NSDate().timeIntervalSince1970)
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
-            if let client = Dropbox.authorizedClient {
-                for i in 0 ... self.selectedImages.count - 1 {
-                    let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
-                     client.files.upload(path: "/\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])", body: fileData!)
-                    let nameImageData = "\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])"
-                    print("\(nameImageData)")
-                    let plainData = (nameImageData as NSString).dataUsingEncoding(NSUTF8StringEncoding)
-                    let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-                    self.nameImagesData.append(base64String)
-                }
-                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                let managedObjectContext = appDelegate.managedObjectContext
-                Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!)
-                appDelegate.saveContext()
-        
+        if let client = Dropbox.authorizedClient {
+            for i in 0 ... self.selectedImages.count - 1 {
+                let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
+                client.files.upload(path: "/\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])", body: fileData!)
+                let nameImageData = "\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])"
+                print("\(nameImageData)")
+                let plainData = (nameImageData as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+                let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+                self.nameImagesData.append(base64String)
             }
-            else {
-                   Dropbox.authorizeFromController(self)
-            }
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let managedObjectContext = appDelegate.managedObjectContext
+            Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!)
+            appDelegate.saveContext()
+            
+        }
+        else {
+            Dropbox.authorizeFromController(self)
+        }
     }
     
     @IBAction func favoriteAction(sender: AnyObject) {
@@ -291,27 +181,130 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         view.endEditing(true)
         self.navigationController?.popViewControllerAnimated(true)
     }
-}
-
-
-extension PHAsset {
     
-    var originalFilename: String? {
+    @IBAction func searchPlaceAction(sender: AnyObject) {
+        let center = CLLocationCoordinate2DMake(10.762689, 106.68234)
+        let northEast = CLLocationCoordinate2DMake(center.latitude + 0.001, center.longitude + 0.001)
+        let southWest = CLLocationCoordinate2DMake(center.latitude - 0.001, center.longitude - 0.001)
+        let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
+        let config = GMSPlacePickerConfig(viewport: viewport)
+        placePicker = GMSPlacePicker(config: config)
         
-        var fname:String?
-        
-        if #available(iOS 9.0, *) {
-            let resources = PHAssetResource.assetResourcesForAsset(self)
-            if let resource = resources.first {
-                fname = resource.originalFilename
+        placePicker?.pickPlaceWithCallback({ (place: GMSPlace?, error: NSError?) -> Void in
+            if let error = error {
+                print("Pick Place error: \(error.localizedDescription)")
+                return
+            }
+            if let place = place {
+                self.placeLabel.text = place.name
+                print("Place address \(place.formattedAddress)")
+                print("Place attributions \(place.attributions)")
+                self.namePlace = place.name
+                self.addressPlace = place.formattedAddress!
+                self.loadFirstPhotoForPlace(place.placeID)
+                self.addMorePicture.hidden = false
+                self.saveInfor.hidden = false
+                self.addPlaceDate.hidden = false
+                self.favoritePlace.hidden = false
+                self.favorite = false
+                
+            } else {
+//                self.placeLabel.text = "No place selected"
+//                self.addMorePicture.hidden = true
+//                self.clearScrollView()
+//                self.saveInfor.hidden = true
+//                self.addPlaceDate.hidden = true
+            }
+        })
+    }
+    
+    @IBAction func addPlaceDateAction(sender: AnyObject) {
+        let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
+        hsdpvc.mainColor = UIColor.yellowColor()
+        hsdpvc.delegate = self
+        self.presentViewController(hsdpvc, animated: true, completion: { _ in })
+    }
+    
+    func hsDatePickerPickedDate(date: NSDate!) {
+        dateVisit = date
+        addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(date), forState: .Normal)
+    }
+    
+    func loadFirstPhotoForPlace(placeID: String) {
+        GMSPlacesClient.sharedClient().lookUpPhotosForPlaceID(placeID) { (photos, error) -> Void in
+            if let error = error {
+                print("Error: \(error.description)")
+            } else {
+                if let firstPhoto = photos?.results.first {
+                    self.loadImageForMetadata(firstPhoto)
+                }
+                else {
+                    let alert = UIAlertController(title: "Search Image", message: "Don't have image for this place", preferredStyle: .Alert)
+                    let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+                    alert.addAction(action)
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    self.imageView.image = UIImage(named: "cover")
+                }
             }
         }
-        
-        if fname == nil {
-            // this is an undocumented workaround that works as of iOS 9.1
-            fname = self.valueForKey("filename") as? String
+    }
+    
+    func loadImageForMetadata(photoMetadata: GMSPlacePhotoMetadata) {
+        GMSPlacesClient.sharedClient()
+            .loadPlacePhoto(photoMetadata, constrainedToSize: imageView.bounds.size,
+                            scale: self.imageView.window!.screen.scale) { (photo, error) -> Void in
+                                if let error = error {
+                                    // TODO: handle the error.
+                                    print("Error: \(error.description)")
+
+                                } else {
+                                    self.imageView.image = photo;
+                                }
         }
+    }
+
+    // set button 
+    func setButton(){
+//        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+//        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+//        favoritePlace.backgroundColor = UIColor(red: 1, green: 0, blue: 0.1, alpha: 0.5)
+//        favoritePlace.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
+//        favoritePlace.isRaised = true
+//        favoritePlace.cornerRadius = favoritePlace.frame.size.width / 2
+//        favoritePlace.rippleFromTapLocation = false
+//        favoritePlace.rippleBeyondBounds = true
         
-        return fname
+        
+//        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+//        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+//        searchPlaceButton.backgroundColor = UIColor(red: 0.3, green: 0, blue: 1, alpha: 1)
+//        searchPlaceButton.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
+//        searchPlaceButton.isRaised = true
+//        searchPlaceButton.cornerRadius = favoritePlace.frame.size.width / 2
+//        searchPlaceButton.rippleFromTapLocation = false
+//        searchPlaceButton.rippleBeyondBounds = true
+//        searchPlaceButton.addTarget(self, action: #selector(PlaceViewController.searchPlace), forControlEvents: .TouchUpInside)
+        
+//        addMorePicture.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.1, alpha: 0.3)
+//        addMorePicture.setTitleColor(UIColor.blueColor(), forState: .Normal)
+//        addMorePicture.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+//        
+//        addPlaceDate.backgroundColor = UIColor(red: 0.8, green: 0.1, blue: 0.7, alpha: 0.3)
+//        addPlaceDate.setTitleColor(UIColor.blueColor(), forState: .Normal)
+//        addPlaceDate.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+//        addPlaceDate.addTarget(self, action: #selector(PlaceViewController.showDatePicker), forControlEvents: .TouchUpInside)
+        
+//        saveInfor.cornerRadius = favoritePlace.frame.size.width / 2
+//        saveInfor.setTitleColor(UIColor.blueColor(), forState: .Normal)
+//        saveInfor.backgroundColor = UIColor(red: 0.8, green: 0.6, blue: 0.7, alpha: 0.3)
+//        saveInfor.rippleFromTapLocation = false
+        
+    }
+    
+    //# MARK: - remove all sub view from scroll view
+    func clearScrollView() {
+        for view in self.imagesScrollView.subviews {
+            view.removeFromSuperview()
+        }
     }
 }

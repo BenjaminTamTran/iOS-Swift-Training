@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Photos
 
 extension String
 {
@@ -230,5 +231,27 @@ public extension UIDevice {
         case "i386", "x86_64":                          return "Simulator"
         default:                                        return identifier
         }
+    }
+}
+
+extension PHAsset {
+    
+    var originalFilename: String? {
+        
+        var fname:String?
+        
+        if #available(iOS 9.0, *) {
+            let resources = PHAssetResource.assetResourcesForAsset(self)
+            if let resource = resources.first {
+                fname = resource.originalFilename
+            }
+        }
+        
+        if fname == nil {
+            // this is an undocumented workaround that works as of iOS 9.1
+            fname = self.valueForKey("filename") as? String
+        }
+        
+        return fname
     }
 }

@@ -109,57 +109,94 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T02-yZ-jRY">
-                                <rect key="frame" x="0.0" y="95" width="375" height="200"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T02-yZ-jRY">
+                                <rect key="frame" x="20" y="123" width="335" height="175"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="175" id="Dnf-g6-rvg"/>
+                                </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4D6-NS-aaY" customClass="BFPaperButton">
-                                <rect key="frame" x="235" y="300" width="80" height="80"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4D6-NS-aaY" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
+                                <rect key="frame" x="224" y="560" width="110" height="38"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="25"/>
                                 <state key="normal" title="favorite">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="favoriteAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="39G-X7-YFO"/>
+                                    <action selector="favoriteAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rW6-2Z-5DC"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mi0-Ba-iRm" customClass="BFPaperButton">
-                                <rect key="frame" x="55" y="300" width="80" height="80"/>
-                                <state key="normal" title="Search">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mi0-Ba-iRm" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
+                                <rect key="frame" x="205" y="73" width="150" height="38"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="3yQ-MF-ajq"/>
+                                    <constraint firstAttribute="width" constant="150" id="Nij-pS-FLQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
+                                <state key="normal" title="Pick place location">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="searchPlaceAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cfc-n4-0dm"/>
+                                </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Place name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eui-5K-PQ4">
-                                <rect key="frame" x="72" y="60" width="303" height="45"/>
-                                <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eui-5K-PQ4">
+                                <rect key="frame" x="81" y="13" width="284" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="p51-q2-K3l"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l40-ki-EQH" customClass="BFPaperButton">
-                                <rect key="frame" x="20" y="400" width="150" height="40"/>
-                                <state key="normal" title="Add more pics">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l40-ki-EQH" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
+                                <rect key="frame" x="20" y="313" width="152" height="38"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="Tkn-Uj-WFj"/>
+                                    <constraint firstAttribute="width" constant="152" id="hNx-QE-bxh"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
+                                <state key="normal" title="Share your pictures">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="addMorePicsAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ueB-mn-jTp"/>
+                                    <action selector="addMorePicsAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="p7Z-Uu-n3d"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r0S-ZP-JWD" customClass="BFPaperButton">
-                                <rect key="frame" x="148" y="578" width="80" height="30"/>
-                                <state key="normal" title="save"/>
-                                <connections>
-                                    <action selector="saveEventAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tM0-au-gJ4"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1B-AV-qdI" customClass="BFPaperButton">
-                                <rect key="frame" x="201" y="400" width="150" height="40"/>
-                                <state key="normal" title="Add place date">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r0S-ZP-JWD" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
+                                <rect key="frame" x="41" y="560" width="110" height="38"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="110" id="HVv-zd-7Rq"/>
+                                    <constraint firstAttribute="height" constant="38" id="brt-ms-KEv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="25"/>
+                                <state key="normal" title="save">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="saveEventAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gZl-Vw-d20"/>
+                                </connections>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VJU-PT-d75">
-                                <rect key="frame" x="0.0" y="448" width="375" height="128"/>
-                            </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BTd-zN-7Jd" userLabel="Back">
-                                <rect key="frame" x="0.0" y="20" width="81" height="47"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1B-AV-qdI" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
+                                <rect key="frame" x="203" y="313" width="152" height="38"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
+                                <state key="normal" title="Add your travel date">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addPlaceDateAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="enw-2j-rAm"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BTd-zN-7Jd" userLabel="Back">
+                                <rect key="frame" x="0.0" y="15" width="81" height="47"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="47" id="Tv8-MK-kJr"/>
+                                    <constraint firstAttribute="width" constant="81" id="z3j-6h-kkj"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -168,8 +205,51 @@
                                     <action selector="backAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Yc8-l5-g7J"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place photo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBm-pb-wD6">
+                                <rect key="frame" x="20" y="82" width="126" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="126" id="K18-6V-S5U"/>
+                                    <constraint firstAttribute="height" constant="21" id="iDI-YF-dcS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VJU-PT-d75">
+                                <rect key="frame" x="20" y="366" width="335" height="174"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="0.98431372549999996" green="0.25490196079999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="VJU-PT-d75" firstAttribute="leading" secondItem="T02-yZ-jRY" secondAttribute="leading" id="0cC-eL-vLq"/>
+                            <constraint firstItem="l40-ki-EQH" firstAttribute="leading" secondItem="T02-yZ-jRY" secondAttribute="leading" id="8zb-lL-EiI"/>
+                            <constraint firstItem="4D6-NS-aaY" firstAttribute="centerY" secondItem="r0S-ZP-JWD" secondAttribute="centerY" id="9c0-ja-KCP"/>
+                            <constraint firstItem="l40-ki-EQH" firstAttribute="top" secondItem="T02-yZ-jRY" secondAttribute="bottom" constant="15" id="APQ-ed-0bw"/>
+                            <constraint firstItem="eui-5K-PQ4" firstAttribute="centerY" secondItem="BTd-zN-7Jd" secondAttribute="centerY" id="Aa1-ed-RTa"/>
+                            <constraint firstItem="r0S-ZP-JWD" firstAttribute="centerX" secondItem="l40-ki-EQH" secondAttribute="centerX" id="BCP-m5-2zQ"/>
+                            <constraint firstItem="VJU-PT-d75" firstAttribute="top" secondItem="P1B-AV-qdI" secondAttribute="bottom" constant="15" id="CIp-zO-QJg"/>
+                            <constraint firstItem="r0S-ZP-JWD" firstAttribute="top" secondItem="VJU-PT-d75" secondAttribute="bottom" constant="20" id="Jj4-GJ-Cy9"/>
+                            <constraint firstItem="4D6-NS-aaY" firstAttribute="centerX" secondItem="P1B-AV-qdI" secondAttribute="centerX" id="N5q-es-1LZ"/>
+                            <constraint firstItem="FBm-pb-wD6" firstAttribute="top" secondItem="BTd-zN-7Jd" secondAttribute="bottom" constant="20" id="Ocu-cJ-O8p"/>
+                            <constraint firstItem="eui-5K-PQ4" firstAttribute="leading" secondItem="BTd-zN-7Jd" secondAttribute="trailing" id="P7l-wm-X47"/>
+                            <constraint firstItem="BTd-zN-7Jd" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="15" id="PUa-CE-3iO"/>
+                            <constraint firstItem="mi0-Ba-iRm" firstAttribute="centerY" secondItem="FBm-pb-wD6" secondAttribute="centerY" id="QuO-b5-PTM"/>
+                            <constraint firstAttribute="trailing" secondItem="eui-5K-PQ4" secondAttribute="trailing" constant="10" id="UbQ-wi-hd1"/>
+                            <constraint firstItem="BTd-zN-7Jd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Uja-Tj-dMU"/>
+                            <constraint firstItem="VJU-PT-d75" firstAttribute="trailing" secondItem="T02-yZ-jRY" secondAttribute="trailing" id="Wkd-dM-Phg"/>
+                            <constraint firstAttribute="trailing" secondItem="mi0-Ba-iRm" secondAttribute="trailing" constant="20" id="Zu8-y9-vgm"/>
+                            <constraint firstItem="P1B-AV-qdI" firstAttribute="trailing" secondItem="T02-yZ-jRY" secondAttribute="trailing" id="apX-GQ-ZQ6"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="r0S-ZP-JWD" secondAttribute="bottom" constant="20" id="dBw-jg-F2y"/>
+                            <constraint firstItem="P1B-AV-qdI" firstAttribute="centerY" secondItem="l40-ki-EQH" secondAttribute="centerY" id="ei5-VV-QEm"/>
+                            <constraint firstItem="T02-yZ-jRY" firstAttribute="top" secondItem="FBm-pb-wD6" secondAttribute="bottom" constant="20" id="fgl-aU-moK"/>
+                            <constraint firstItem="T02-yZ-jRY" firstAttribute="leading" secondItem="FBm-pb-wD6" secondAttribute="leading" id="gCU-RJ-Da0"/>
+                            <constraint firstItem="P1B-AV-qdI" firstAttribute="width" secondItem="l40-ki-EQH" secondAttribute="width" id="ggl-Yx-Nth"/>
+                            <constraint firstItem="4D6-NS-aaY" firstAttribute="width" secondItem="r0S-ZP-JWD" secondAttribute="width" id="h5F-PE-XDX"/>
+                            <constraint firstItem="P1B-AV-qdI" firstAttribute="height" secondItem="l40-ki-EQH" secondAttribute="height" id="iBB-iD-bLF"/>
+                            <constraint firstItem="FBm-pb-wD6" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="j9k-8h-HWz"/>
+                            <constraint firstAttribute="trailing" secondItem="T02-yZ-jRY" secondAttribute="trailing" constant="20" id="ug8-5e-vuL"/>
+                            <constraint firstItem="4D6-NS-aaY" firstAttribute="height" secondItem="r0S-ZP-JWD" secondAttribute="height" id="wg9-lw-zWn"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="sca-52-A7M"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
@@ -182,7 +262,6 @@
                         <outlet property="imagesScrollView" destination="VJU-PT-d75" id="A05-qS-lq8"/>
                         <outlet property="placeLabel" destination="eui-5K-PQ4" id="jUJ-Fy-VJq"/>
                         <outlet property="saveInfor" destination="r0S-ZP-JWD" id="HvG-MW-Jz9"/>
-                        <outlet property="searchPlaceButton" destination="mi0-Ba-iRm" id="gfT-pZ-bvg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

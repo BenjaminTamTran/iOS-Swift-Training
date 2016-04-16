@@ -202,5 +202,16 @@ class Utility {
             }
         })
     }
+}
+
+class DateFormatter: NSDateFormatter {
     
+    init(format : String) {
+        super.init()
+        self.dateFormat = format
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

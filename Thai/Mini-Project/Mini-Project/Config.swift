@@ -16,3 +16,5 @@ let monthOfYear = [ "1":"Janaury", "2":"February", "3":"March", "4":"April" , "5
 
 let kUserDefault = NSUserDefaults.standardUserDefaults()
 let kHasTutorial = "kHasTutorial5"
+
+let kDateYYMMDD = DateFormatter(format: "YYYY/MM/dd")
