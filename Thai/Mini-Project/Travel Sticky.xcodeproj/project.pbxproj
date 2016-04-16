@@ -23,6 +23,7 @@
 		F8C850501CC1E16000B9ABFE /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C8504C1CC1E16000B9ABFE /* Utility.swift */; };
 		F8C850531CC1E1DA00B9ABFE /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C850521CC1E1DA00B9ABFE /* Config.swift */; };
 		F8C850551CC1EA3F00B9ABFE /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C850541CC1EA3F00B9ABFE /* PlaceListViewController.swift */; };
+		F8C850571CC210EE00B9ABFE /* AnimationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C850561CC210EE00B9ABFE /* AnimationButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		F8C8504C1CC1E16000B9ABFE /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		F8C850521CC1E1DA00B9ABFE /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		F8C850541CC1EA3F00B9ABFE /* PlaceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
+		F8C850561CC210EE00B9ABFE /* AnimationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 		F8C850481CC1E0A000B9ABFE /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				F8C850561CC210EE00B9ABFE /* AnimationButton.swift */,
 				F8C850511CC1E16900B9ABFE /* Font Awesome */,
 				F8C850491CC1E16000B9ABFE /* Extension.swift */,
 				F8C8504C1CC1E16000B9ABFE /* Utility.swift */,
@@ -299,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8C850571CC210EE00B9ABFE /* AnimationButton.swift in Sources */,
 				F8C850551CC1EA3F00B9ABFE /* PlaceListViewController.swift in Sources */,
 				D0BCD7CC1CBB456500931420 /* PlaceViewController.swift in Sources */,
 				D0BCD7D21CBB456500931420 /* Mini_Project.xcdatamodeld in Sources */,

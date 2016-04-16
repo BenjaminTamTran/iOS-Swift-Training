@@ -11,8 +11,9 @@ import UIKit
 class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // Mark: UI's elements
-    @IBOutlet var historyTableView: UITableView!
-    
+    @IBOutlet var placesTableView: UITableView!
+    @IBOutlet weak var addPlaceButton: UIButton!
+    @IBOutlet weak var placeTabBarItem: UITabBarItem!
     
     // Mark: Class's properties
     var historyPlace = [Place]()
@@ -39,17 +40,20 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     
     // Mark: class's private methods
     private func initialize() {
-        
+        addPlaceButton.setFAIcon(FAType.FAPlus, forState: UIControlState.Normal)
+        placeTabBarItem.setFAIcon(FAType.FAMapPin)
     }
     
     private func reloadData() {
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext = appDelegate.managedObjectContext
         historyPlace = Place.allPlace(managedObjectContext)
-        historyTableView.reloadData()
+        placesTableView.reloadData()
     }
     
     // MARK: Button Action
+    @IBAction func addPlace(sender: AnyObject) {
+        self.performSegueWithIdentifier("showPlaceSegue", sender: self)
+    }
     
     
     // MARK: UITableViewDataSource

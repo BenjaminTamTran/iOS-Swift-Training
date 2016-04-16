@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Property
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.whiteColor()], forState: UIControlState.Selected)
+        UITabBar.appearance().tintColor = UIColor.whiteColor()
         GMSServices.provideAPIKey("AIzaSyAJcn_BuQ5DrYEu-ld9vKOAW_Aw2rZ-MyI")
         Dropbox.setupWithAppKey("y8o963u1cjeccgx")
         return true

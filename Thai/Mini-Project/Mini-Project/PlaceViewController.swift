@@ -23,6 +23,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     @IBOutlet var saveInfor: BFPaperButton!
     @IBOutlet var imagesScrollView: UIScrollView!
     
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet var placeLabel: UILabel!
     var test: Bool?
     var selectedImages = [UIImage]()
@@ -38,6 +39,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.initialize()
         setButton()
         //set image
         imageView.image = UIImage(named: "cover")
@@ -47,6 +49,11 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         addMorePicture.enabled = false
         addPlaceDate.enabled = false
         favorite = false
+    }
+    
+    // Mark: class's private methods
+    private func initialize() {
+        backButton.setFAIcon(FAType.FAChevronLeft, forState: UIControlState.Normal)
     }
     
 //    func initStackView() {
@@ -280,6 +287,10 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         favorite = true
     }
     
+    @IBAction func backAction(sender: AnyObject) {
+        view.endEditing(true)
+        self.navigationController?.popViewControllerAnimated(true)
+    }
 }
 
 
