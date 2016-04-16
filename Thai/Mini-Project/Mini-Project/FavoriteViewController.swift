@@ -9,14 +9,16 @@
 import UIKit
 
 class FavoriteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet weak var favouriteBarItem: UITabBarItem!
     var places = [Place]()
     override func viewDidLoad() {
         super.viewDidLoad()
-       
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+//        favouriteBarItem.setFAIcon(FAType.FABookmarkO)
         reloadData()
     }
     
