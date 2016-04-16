@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  PlaceViewController.swift
 //  Mini-Project
 //
 //  Created by Nguyen Xuan Thai on 4/11/16.
@@ -8,13 +8,13 @@
 
 import UIKit
 import Photos
-
 import BSImagePicker
 import GoogleMaps
 import BFPaperButton
 import HSDatePickerViewController
 import SwiftyDropbox
-class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
+
+class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate {
     var placePicker: GMSPlacePicker?
     @IBOutlet var favoritePlace: BFPaperButton!
     @IBOutlet var searchPlaceButton: BFPaperButton!
@@ -159,7 +159,7 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
         searchPlaceButton.cornerRadius = favoritePlace.frame.size.width / 2
         searchPlaceButton.rippleFromTapLocation = false
         searchPlaceButton.rippleBeyondBounds = true
-        searchPlaceButton.addTarget(self, action: #selector(ViewController.searchPlace), forControlEvents: .TouchUpInside)
+        searchPlaceButton.addTarget(self, action: #selector(PlaceViewController.searchPlace), forControlEvents: .TouchUpInside)
         
         addMorePicture.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.1, alpha: 0.3)
         addMorePicture.setTitleColor(UIColor.blueColor(), forState: .Normal)
@@ -168,7 +168,7 @@ class ViewController: UIViewController, HSDatePickerViewControllerDelegate {
         addPlaceDate.backgroundColor = UIColor(red: 0.8, green: 0.1, blue: 0.7, alpha: 0.3)
         addPlaceDate.setTitleColor(UIColor.blueColor(), forState: .Normal)
         addPlaceDate.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        addPlaceDate.addTarget(self, action: #selector(ViewController.showDatePicker), forControlEvents: .TouchUpInside)
+        addPlaceDate.addTarget(self, action: #selector(PlaceViewController.showDatePicker), forControlEvents: .TouchUpInside)
         
         saveInfor.cornerRadius = favoritePlace.frame.size.width / 2
         saveInfor.setTitleColor(UIColor.blueColor(), forState: .Normal)

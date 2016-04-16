@@ -176,4 +176,31 @@ class Utility {
         }
     }
     
+    class func pinkColor(alpha: Float = 1.0) -> UIColor {
+        return UIColor(red: 255.0/255.0, green: 90.0/255.0, blue: 96.0/255.0, alpha: alpha.cgfloat())
+    }
+    
+    class func showTutorial(view: UIView, screen: String) {
+        let key = "\(kHasTutorial) for \(screen)"
+        if !kUserDefault.boolForKey(key) {
+            let imageView = UIImageView(frame: view.frame)
+            imageView.contentMode = UIViewContentMode.ScaleToFill
+            let imageName = "\(screen) iphone 6 plus"
+            imageView.image = UIImage(named: imageName)
+            imageView.tag = 2507
+            view.addSubview(imageView)
+            kUserDefault.setBool(true, forKey: key)
+            kUserDefault.synchronize()
+        }
+    }
+    
+    class func hideTutorial(view: UIView) {
+        dispatch_async(dispatch_get_main_queue(),{
+            let view = view.viewWithTag(2507) as? UIImageView
+            if let tutorial = view {
+                tutorial.removeFromSuperview()
+            }
+        })
+    }
+    
 }

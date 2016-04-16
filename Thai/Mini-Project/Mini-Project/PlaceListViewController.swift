@@ -1,14 +1,14 @@
 //
-//  HistoryViewController.swift
+//  PlaceListViewController.swift
 //  Mini-Project
 //
-//  Created by Nguyen Xuan Thai on 4/15/16.
-//  Copyright © 2016 Thai. All rights reserved.
+//  Created by Tran Huu Tam on 4/15/16.
+//  Copyright © 2016 The Simple Studio. All rights reserved.
 //
 
 import UIKit
 
-class HistoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // Mark: UI's elements
     @IBOutlet var historyTableView: UITableView!
