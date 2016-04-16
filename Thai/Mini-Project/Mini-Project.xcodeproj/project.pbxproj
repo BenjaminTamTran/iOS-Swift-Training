@@ -358,10 +358,13 @@
 			baseConfigurationReference = 263551295809A28086669A03 /* Pods-Mini-Project.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tam Tam (9Z4D262E42)";
 				INFOPLIST_FILE = "Mini-Project/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.thai.Mini-Project";
+				PRODUCT_BUNDLE_IDENTIFIER = com.thesimplestudio.travelsticky;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ff9acad4-fdc0-4cb8-a491-2ae1ea31975d";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -370,10 +373,13 @@
 			baseConfigurationReference = DC0CC7AC465E448BCA44458B /* Pods-Mini-Project.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tam Tam (9Z4D262E42)";
 				INFOPLIST_FILE = "Mini-Project/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.thai.Mini-Project";
+				PRODUCT_BUNDLE_IDENTIFIER = com.thesimplestudio.travelsticky;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ff9acad4-fdc0-4cb8-a491-2ae1ea31975d";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
