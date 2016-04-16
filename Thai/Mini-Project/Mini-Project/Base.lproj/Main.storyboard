@@ -28,7 +28,7 @@
         <!--Add place-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Mini_Project" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Travel_Sticky" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -158,7 +158,7 @@
         <!--Favorite -->
         <scene sceneID="g7r-bO-AJC">
             <objects>
-                <viewController title="Favorite " id="qqD-yc-cpq" customClass="FavoriteViewController" customModule="Mini_Project" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Favorite " id="qqD-yc-cpq" customClass="FavoriteViewController" customModule="Travel_Sticky" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Dw2-Ua-NEe"/>
                         <viewControllerLayoutGuide type="bottom" id="rws-dx-WTJ"/>
@@ -175,7 +175,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ubi-Gk-d0P" id="fx3-Qb-0Az">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="62.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -219,7 +219,7 @@
         <!--History-->
         <scene sceneID="FTX-7b-o08">
             <objects>
-                <viewController id="1r5-fi-y9K" customClass="HistoryViewController" customModule="Mini_Project" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="1r5-fi-y9K" customClass="HistoryViewController" customModule="Travel_Sticky" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LpQ-IK-psr"/>
                         <viewControllerLayoutGuide type="bottom" id="zpA-xr-7jJ"/>
@@ -236,7 +236,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rvc-el-Y6V" id="EoY-l5-ft2">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
