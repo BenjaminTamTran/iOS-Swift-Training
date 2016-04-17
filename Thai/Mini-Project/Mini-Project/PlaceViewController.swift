@@ -150,8 +150,10 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     
     //Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
+        let imgData = UIImageJPEGRepresentation(imageView.image!,1)
         let currentDate = String(NSDate().timeIntervalSince1970)
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
+        if
         if let client = Dropbox.authorizedClient {
             for i in 0 ... self.selectedImages.count - 1 {
                 let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
@@ -164,7 +166,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
             }
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             let managedObjectContext = appDelegate.managedObjectContext
-            Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!)
+            Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
+            
             appDelegate.saveContext()
             
         }

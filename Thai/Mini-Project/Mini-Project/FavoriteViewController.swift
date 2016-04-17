@@ -16,6 +16,10 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 //        favouriteBarItem.setFAIcon(FAType.FABookmarkO)

@@ -14,6 +14,7 @@ class Place: NSManagedObject {
     @NSManaged var date: NSDate
     @NSManaged var images: AnyObject
     @NSManaged var favorite: Bool
+    @NSManaged var imgTravel: NSData
     
     lazy var imagesString: [String]? = {
         if let imagesStr = self.images as? [String] {
@@ -27,13 +28,14 @@ class Place: NSManagedObject {
         }
         return nil
     }()
-    class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool) -> Place {
+    class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool, imgTravel: NSData) -> Place {
         let place = NSEntityDescription.insertNewObjectForEntityForName("Place", inManagedObjectContext: moc) as! Place
             place.name = name
             place.address = address
             place.date = date
             place.images = images
             place.favorite = favorite
+            place.imgTravel = imgTravel
         return place
     }
     

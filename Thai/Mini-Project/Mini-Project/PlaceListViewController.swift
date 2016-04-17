@@ -22,7 +22,8 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.initialize()
+        let managedObjectContext = appDelegate.managedObjectContext
+          self.initialize()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -65,11 +66,14 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
         return historyPlace.count
     }
     
-    
     // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) 
         cell.textLabel?.text = historyPlace[indexPath.row].name
+        
+        cell.imageView?.image = UIImage(data: historyPlace[indexPath.row].imgTravel)
+        
+        cell.detailTextLabel?.text = historyPlace[indexPath.row].date.toShortTimeString()
         return cell
     }
 }
