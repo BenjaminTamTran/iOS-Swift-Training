@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0574D5871CC3686F00EA3628 /* Pods_Travel_Sticky.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0507EEBD1CC353A100167E24 /* Pods_Travel_Sticky.framework */; };
+		B3647F89714AF13A2A4CCA10 /* Pods_Travel_Sticky.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D960ADD6174AEE876F50FDF2 /* Pods_Travel_Sticky.framework */; };
 		D03DF82E1CBFD21300E77401 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DF82D1CBFD21300E77401 /* Place.swift */; };
 		D0BCD7CA1CBB456500931420 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCD7C91CBB456500931420 /* AppDelegate.swift */; };
 		D0BCD7CC1CBB456500931420 /* PlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCD7CB1CBB456500931420 /* PlaceViewController.swift */; };
@@ -40,6 +41,7 @@
 		D0BCD7D61CBB456500931420 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D0BCD7D81CBB456500931420 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0CDC1191CBBE26A00651C5D /* FavoriteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		D960ADD6174AEE876F50FDF2 /* Pods_Travel_Sticky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Travel_Sticky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8C850491CC1E16000B9ABFE /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		F8C8504A1CC1E16000B9ABFE /* FAIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAIcon.swift; sourceTree = "<group>"; };
 		F8C8504B1CC1E16000B9ABFE /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0574D5871CC3686F00EA3628 /* Pods_Travel_Sticky.framework in Frameworks */,
+				B3647F89714AF13A2A4CCA10 /* Pods_Travel_Sticky.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				0507EEBD1CC353A100167E24 /* Pods_Travel_Sticky.framework */,
+				D960ADD6174AEE876F50FDF2 /* Pods_Travel_Sticky.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -169,8 +173,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D0BCD7DB1CBB456500931420 /* Build configuration list for PBXNativeTarget "Travel Sticky" */;
 			buildPhases = (
-				6FD3A5E368D6C86EB1273708 /* Check Pods Manifest.lock */,
 				C575FEF9E2D28B1A67674B53 /* 📦 Check Pods Manifest.lock */,
+				6FD3A5E368D6C86EB1273708 /* Check Pods Manifest.lock */,
 				D0BCD7C21CBB456500931420 /* Sources */,
 				D0BCD7C31CBB456500931420 /* Frameworks */,
 				D0BCD7C41CBB456500931420 /* Resources */,
@@ -249,7 +253,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Travel Sticky/Pods-Travel Sticky-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		31040E64C5A2254DE9D1443A /* Copy Pods Resources */ = {
@@ -309,7 +313,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Travel Sticky/Pods-Travel Sticky-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C575FEF9E2D28B1A67674B53 /* 📦 Check Pods Manifest.lock */ = {

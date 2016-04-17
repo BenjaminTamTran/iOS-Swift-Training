@@ -64,7 +64,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         self.searchPlaceAction(self.view)
         backButton.setFAIcon(FAType.FAChevronLeft, forState: UIControlState.Normal)
         saveInfor.setFAIcon(FAType.FASave, forState: .Normal)
-        favoritePlace.setFAIcon(FAType.FABookmarkO, forState: .Normal)
+        favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
         imageView.image = UIImage(named: "cover")
         saveInfor.hidden = true
         addMorePicture.hidden = true
@@ -153,31 +153,64 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         let imgData = UIImageJPEGRepresentation(imageView.image!,1)
         let currentDate = String(NSDate().timeIntervalSince1970)
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
-        if
-        if let client = Dropbox.authorizedClient {
-            for i in 0 ... self.selectedImages.count - 1 {
-                let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
-                client.files.upload(path: "/\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])", body: fileData!)
-                let nameImageData = "\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])"
-                print("\(nameImageData)")
-                let plainData = (nameImageData as NSString).dataUsingEncoding(NSUTF8StringEncoding)
-                let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-                self.nameImagesData.append(base64String)
+        if dateVisit == nil {
+            let alert = UIAlertController(title: "Error", message: "Missing Add Date", preferredStyle: .Alert)
+            let actionOK = UIAlertAction(title: "OK", style: .Default, handler: { UIAlertAction in
+                let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
+                hsdpvc.mainColor = UIColor.yellowColor()
+                hsdpvc.delegate = self
+                self.presentViewController(hsdpvc, animated: true, completion: { _ in })
+            })
+            let actionCancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            alert.addAction(actionOK)
+            alert.addAction(actionCancel)
+            self.presentViewController(alert, animated: true, completion: nil)
+
+        } else
+            {
+                if selectedImages.count == 0 {
+                    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    let managedObjectContext = appDelegate.managedObjectContext
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite!, imgTravel: imgData!)
+                    appDelegate.saveContext()
+                }
+                else {
+                    if let client = Dropbox.authorizedClient {
+                        for i in 0 ... self.selectedImages.count - 1 {
+                            let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
+                            client.files.upload(path: "/\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])", body: fileData!)
+                            let nameImageData = "\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])"
+                            print("\(nameImageData)")
+                            let plainData = (nameImageData as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+                            let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+                            self.nameImagesData.append(base64String)
+                            }
+                    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    let managedObjectContext = appDelegate.managedObjectContext
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
+                    
+                    appDelegate.saveContext()
+                    
+                    }
+                else {
+                    Dropbox.authorizeFromController(self)
+                    }
             }
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            let managedObjectContext = appDelegate.managedObjectContext
-            Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
-            
-            appDelegate.saveContext()
-            
+                let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
+                self.navigationController?.pushViewController(secondViewController!, animated: true)
         }
-        else {
-            Dropbox.authorizeFromController(self)
-        }
+        
     }
     
     @IBAction func favoriteAction(sender: AnyObject) {
-        favorite = true
+        if favorite == false {
+            favorite = true
+            favoritePlace.setFAIcon(FAType.FAHeart, forState: .Normal)
+        }
+        else {
+            favorite = false
+            favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
+        }
     }
     
     @IBAction func backAction(sender: AnyObject) {
@@ -217,6 +250,10 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
 //                self.clearScrollView()
 //                self.saveInfor.hidden = true
 //                self.addPlaceDate.hidden = true
+                let alert = UIAlertController(title: "Search Place", message: "Please press Pick Place Location to add location ", preferredStyle: .Alert)
+                let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+                alert.addAction(action)
+                self.presentViewController(alert, animated: true, completion: nil)
             }
         })
     }
