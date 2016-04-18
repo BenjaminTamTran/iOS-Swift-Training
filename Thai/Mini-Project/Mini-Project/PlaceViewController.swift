@@ -153,21 +153,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         let imgData = UIImageJPEGRepresentation(imageView.image!,1)
         let currentDate = String(NSDate().timeIntervalSince1970)
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
-        if dateVisit == nil {
-            let alert = UIAlertController(title: "Error", message: "Missing Add Date", preferredStyle: .Alert)
-            let actionOK = UIAlertAction(title: "OK", style: .Default, handler: { UIAlertAction in
-                let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
-                hsdpvc.mainColor = UIColor.yellowColor()
-                hsdpvc.delegate = self
-                self.presentViewController(hsdpvc, animated: true, completion: { _ in })
-            })
-            let actionCancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-            alert.addAction(actionOK)
-            alert.addAction(actionCancel)
-            self.presentViewController(alert, animated: true, completion: nil)
-
-        } else
-            {
+        if let dateVisit = dateVisit {
                 if selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
@@ -188,7 +174,6 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
                     Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
-                    
                     appDelegate.saveContext()
                     
                     }
@@ -199,11 +184,26 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
                 self.navigationController?.pushViewController(secondViewController!, animated: true)
         }
+        else {
+                let alert = UIAlertController(title: "Error", message: "Missing Add Date", preferredStyle: .Alert)
+                let actionOK = UIAlertAction(title: "OK", style: .Default, handler: { UIAlertAction in
+                    let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
+                    hsdpvc.mainColor = UIColor.yellowColor()
+                    hsdpvc.delegate = self
+                    self.presentViewController(hsdpvc, animated: true, completion: { _ in })
+                })
+                let actionCancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+                alert.addAction(actionOK)
+                alert.addAction(actionCancel)
+                self.presentViewController(alert, animated: true, completion: nil)
+                
+            
+        }
         
     }
     
     @IBAction func favoriteAction(sender: AnyObject) {
-        if favorite == false {
+        if !favorite! {
             favorite = true
             favoritePlace.setFAIcon(FAType.FAHeart, forState: .Normal)
         }
