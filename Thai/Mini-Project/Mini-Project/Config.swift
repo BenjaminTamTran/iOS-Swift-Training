@@ -18,3 +18,6 @@ let kUserDefault = NSUserDefaults.standardUserDefaults()
 let kHasTutorial = "kHasTutorial5"
 
 let kDateYYMMDD = DateFormatter(format: "YYYY/MM/dd")
+let accessTokenDropbox = "Sz4KEuRFprwAAAAAAAB3TolrxyQg1BMv35XfqP19PW746nMteXE70Ig8ym1Asosj"
+let uidDropbox = "241454489"
+

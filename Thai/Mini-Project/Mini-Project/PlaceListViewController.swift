@@ -17,7 +17,7 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     
     // Mark: Class's properties
     var historyPlace = [Place]()
-    
+    var placePick: Place?
     
     // Mark: Application's life cirlce
     override func viewDidLoad() {
@@ -53,6 +53,7 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     
     // MARK: Button Action
     @IBAction func addPlace(sender: AnyObject) {
+        placePick = nil
         self.performSegueWithIdentifier("showPlaceSegue", sender: self)
     }
     
@@ -75,5 +76,19 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
         
         cell.detailTextLabel?.text = historyPlace[indexPath.row].date.toShortTimeString()
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        placePick = historyPlace[indexPath.row]
+        self.performSegueWithIdentifier("showPlaceSegue", sender: self)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showPlaceSegue" {
+            if let vc = segue.destinationViewController as? PlaceViewController {
+                vc.placePick = placePick
+            }
+            
+        }
     }
 }

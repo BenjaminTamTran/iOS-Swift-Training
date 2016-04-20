@@ -38,7 +38,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     var places = [Place]()
     var nameImagesData = [String]()
     var placePicker: GMSPlacePicker?
-    
+    var placePick: Place?
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,16 +61,48 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     
     // Mark: class's private methods
     private func initialize() {
-        self.searchPlaceAction(self.view)
         backButton.setFAIcon(FAType.FAChevronLeft, forState: UIControlState.Normal)
         saveInfor.setFAIcon(FAType.FASave, forState: .Normal)
         favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
-        imageView.image = UIImage(named: "cover")
-        saveInfor.hidden = true
-        addMorePicture.hidden = true
-        addPlaceDate.hidden = true
-        favoritePlace.hidden = true
-        favorite = false
+        if let place = placePick {
+            addMorePicture.hidden = false
+            addPlaceDate.hidden = false
+            favoritePlace.hidden = false
+            renderUIWithPlace(place)
+            placePick = nil
+        }
+        else {
+            self.searchPlaceAction(self.view)
+            imageView.image = UIImage(named: "cover")
+            saveInfor.hidden = true
+            addMorePicture.hidden = true
+            addPlaceDate.hidden = true
+            favoritePlace.hidden = true
+            favorite = false
+        }
+
+    }
+    
+    func renderUIWithPlace(place: Place) {
+        placeLabel.text = place.name
+        imageView.image = UIImage(data: place.imgTravel)
+        addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(place.date), forState: .Normal)
+        clearScrollView()
+        
+        var xCoordinate: CGFloat = 10
+        for image in place.images as! [String] {
+            print(image)
+            let imageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
+            imageView.contentMode = UIViewContentMode.ScaleAspectFit
+            self.imagesScrollView.addSubview(imageView)
+            xCoordinate += self.imagesScrollView.frame.width
+        }
+        var contentSize = self.imagesScrollView.contentSize
+        let width = CGFloat(self.imageNames.count)
+        contentSize.width = width * self.imagesScrollView.frame.width
+        self.imagesScrollView.contentSize = contentSize
+        let scrollPoint = CGPointMake(0.0, 0.0)
+        self.imagesScrollView.setContentOffset(scrollPoint, animated: true)
     }
     
 //    func initStackView() {
@@ -160,32 +192,37 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                     Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite!, imgTravel: imgData!)
                     appDelegate.saveContext()
                 }
-                else {
+                else
+                {
                     if let client = Dropbox.authorizedClient {
                         for i in 0 ... self.selectedImages.count - 1 {
                             let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
-                            client.files.upload(path: "/\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])", body: fileData!)
-                            let nameImageData = "\(self.namePlace!)/ \(currenDateArr[0])_\(self.imageNames[i])"
-                            print("\(nameImageData)")
-                            let plainData = (nameImageData as NSString).dataUsingEncoding(NSUTF8StringEncoding)
-                            let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-                            self.nameImagesData.append(base64String)
+                            let fileNamePlaceEncode = self.namePlace!.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
+                            print(fileNamePlaceEncode!)
+                            let filePath = "/\(fileNamePlaceEncode!)/\(currenDateArr[0])\(self.imageNames[i])"
+                            client.files.upload(path: filePath, body: fileData!)
+                            nameImagesData.append(filePath)
                             }
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
-                    Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
                     appDelegate.saveContext()
                     
                     }
-                else {
-                    Dropbox.authorizeFromController(self)
+                else
+                    {
+                        ///Dropbox.authorizeFromController(self)
+                        let accessToken = DropboxAccessToken(accessToken: accessTokenDropbox, uid: uidDropbox)
+                        Dropbox.authorizedClient = DropboxClient(accessToken: accessToken)
+                        DropboxClient.sharedClient = Dropbox.authorizedClient
                     }
-            }
-                let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
-                self.navigationController?.pushViewController(secondViewController!, animated: true)
+                }
+            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
+            self.navigationController?.pushViewController(secondViewController!, animated: true)
         }
-        else {
-                let alert = UIAlertController(title: "Error", message: "Missing Add Date", preferredStyle: .Alert)
+        else
+        {
+            let alert = UIAlertController(title: "Error", message: "Missing Add Date", preferredStyle: .Alert)
                 let actionOK = UIAlertAction(title: "OK", style: .Default, handler: { UIAlertAction in
                     let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
                     hsdpvc.mainColor = UIColor.yellowColor()
@@ -244,7 +281,9 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 self.favoritePlace.hidden = false
                 self.favorite = false
                 
-            } else {
+            }
+            else
+            {
 //                self.placeLabel.text = "No place selected"
 //                self.addMorePicture.hidden = true
 //                self.clearScrollView()

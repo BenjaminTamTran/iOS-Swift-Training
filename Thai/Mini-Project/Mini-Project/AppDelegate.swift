@@ -21,19 +21,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().tintColor = UIColor.whiteColor()
         GMSServices.provideAPIKey("AIzaSyAJcn_BuQ5DrYEu-ld9vKOAW_Aw2rZ-MyI")
         Dropbox.setupWithAppKey("y8o963u1cjeccgx")
+        let accessToken = DropboxAccessToken(accessToken: accessTokenDropbox, uid: uidDropbox)
+        Dropbox.authorizedClient = DropboxClient(accessToken: accessToken)
+        DropboxClient.sharedClient = Dropbox.authorizedClient
         return true
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        print(url)
         
-        if let authResult = Dropbox.handleRedirectURL(url) {
-            switch authResult {
-            case .Success(let token):
-                print("Success! User is logged into Dropbox with token: \(token)")
-            case .Error(let error, let description):
-                print("Error \(error): \(description)")
-            }
-        }
+        let accessToken = DropboxAccessToken(accessToken: accessTokenDropbox, uid: uidDropbox)
+        Dropbox.authorizedClient = DropboxClient(accessToken: accessToken)
+        DropboxClient.sharedClient = Dropbox.authorizedClient
+
+//        if let authResult = Dropbox.handleRedirectURL(url) {
+//            switch authResult {
+//            case .Success(let token):
+//                print("Success! User is logged into Dropbox with token: \(token)")
+//                print("\(token.accessToken)")
+//                print("\(token.uid)")
+//            case .Error(let error, let description):
+//                print("Error \(error): \(description)")
+//            }
+//        }
         
         return false
     }
@@ -91,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
             dict[NSLocalizedFailureReasonErrorKey] = failureReason
 
-            dict[NSUnderlyingErrorKey] = error as NSError
+            dict[NSUnderlyingErrorKey] = error as! NSError
             let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
             // Replace this with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.

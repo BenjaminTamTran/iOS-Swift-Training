@@ -16,18 +16,18 @@ class Place: NSManagedObject {
     @NSManaged var favorite: Bool
     @NSManaged var imgTravel: NSData
     
-    lazy var imagesString: [String]? = {
-        if let imagesStr = self.images as? [String] {
-            var strTemp = [String]()
-            for image in imagesStr {
-                let decodedData = NSData(base64EncodedString: image, options: NSDataBase64DecodingOptions(rawValue: 0))
-                let decodedString = NSString(data: decodedData!, encoding: NSUTF8StringEncoding)
-                strTemp.append(decodedString as! String)
-            }
-            return strTemp
-        }
-        return nil
-    }()
+//    lazy var imagesString: [String]? = {
+//        if let imagesStr = self.images as? [String] {
+//            var strTemp = [String]()
+//            for image in imagesStr {
+//                let decodedData = NSData(base64EncodedString: image, options: NSDataBase64DecodingOptions(rawValue: 0))
+//                let decodedString = NSString(data: decodedData!, encoding: NSUTF8StringEncoding)
+//                strTemp.append(decodedString as! String)
+//            }
+//            return strTemp
+//        }
+//        return nil
+//    }()
     class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool, imgTravel: NSData) -> Place {
         let place = NSEntityDescription.insertNewObjectForEntityForName("Place", inManagedObjectContext: moc) as! Place
             place.name = name
