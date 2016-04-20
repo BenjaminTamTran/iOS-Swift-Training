@@ -45,6 +45,10 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         place = places[indexPath.row]
+        self.performSegueWithIdentifier("favouriteShowPlaceSegue", sender: self)
+//        let viewController = self.storyboard!.instantiateViewControllerWithIdentifier("placeViewController") as! PlaceViewController
+//        viewController.placePick = place
+//        self.presentViewController(viewController, animated: true, completion: nil)
 
     }
     func reloadData() {
@@ -53,6 +57,14 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
         places = Place.allFavorite(managedObjectContext)
         favoriteTableView.reloadData()
     }
-
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "favouriteShowPlaceSegue" {
+            if let vc = segue.destinationViewController as? PlaceViewController {
+                vc.placePick = place
+            }
+            
+        }
+    }
 
 }

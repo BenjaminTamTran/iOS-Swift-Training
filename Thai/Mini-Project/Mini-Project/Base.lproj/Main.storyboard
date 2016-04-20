@@ -18,7 +18,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="c0z-tX-4la" kind="relationship" relationship="viewControllers" id="6fU-ec-AzR"/>
-                        <segue destination="qqD-yc-cpq" kind="relationship" relationship="viewControllers" id="Waw-JO-Up1"/>
+                        <segue destination="Tpx-Jp-xrQ" kind="relationship" relationship="viewControllers" id="Waw-JO-Up1"/>
                         <segue destination="8Dm-Pr-JGr" kind="relationship" relationship="viewControllers" id="8Pt-bK-bff"/>
                     </connections>
                 </tabBarController>
@@ -131,7 +131,7 @@
         <!--Place View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="PlaceViewController" customModule="Travel_Sticky" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="placeViewController" id="BYZ-38-t0r" customClass="PlaceViewController" customModule="Travel_Sticky" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -140,7 +140,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T02-yZ-jRY">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T02-yZ-jRY">
                                 <rect key="frame" x="20" y="123" width="335" height="175"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="175" id="Dnf-g6-rvg"/>
@@ -157,7 +157,7 @@
                                     <action selector="favoriteAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rW6-2Z-5DC"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mi0-Ba-iRm" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mi0-Ba-iRm" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
                                 <rect key="frame" x="205" y="73" width="150" height="38"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -172,7 +172,7 @@
                                     <action selector="searchPlaceAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cfc-n4-0dm"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eui-5K-PQ4">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eui-5K-PQ4">
                                 <rect key="frame" x="81" y="13" width="284" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="p51-q2-K3l"/>
@@ -181,7 +181,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l40-ki-EQH" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l40-ki-EQH" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
                                 <rect key="frame" x="20" y="313" width="152" height="38"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -211,7 +211,7 @@
                                     <action selector="saveEventAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gZl-Vw-d20"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1B-AV-qdI" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1B-AV-qdI" customClass="RectangleButton" customModule="Travel_Sticky" customModuleProvider="target">
                                 <rect key="frame" x="203" y="313" width="152" height="38"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
@@ -222,7 +222,7 @@
                                     <action selector="addPlaceDateAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="enw-2j-rAm"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BTd-zN-7Jd" userLabel="Back">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BTd-zN-7Jd" userLabel="Back">
                                 <rect key="frame" x="0.0" y="15" width="81" height="47"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="47" id="Tv8-MK-kJr"/>
@@ -236,7 +236,7 @@
                                     <action selector="backAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Yc8-l5-g7J"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place photo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBm-pb-wD6">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Place photo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBm-pb-wD6">
                                 <rect key="frame" x="20" y="82" width="126" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="126" id="K18-6V-S5U"/>
@@ -246,7 +246,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VJU-PT-d75">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VJU-PT-d75">
                                 <rect key="frame" x="20" y="366" width="335" height="174"/>
                             </scrollView>
                         </subviews>
@@ -297,7 +297,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="563.5" y="-211.5"/>
+            <point key="canvasLocation" x="594.5" y="314.5"/>
         </scene>
         <!--Favorite -->
         <scene sceneID="g7r-bO-AJC">
@@ -311,7 +311,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bookmarks" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4z-xI-2SS">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Bookmarks" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4z-xI-2SS">
                                 <rect key="frame" x="100" y="30" width="175" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -321,7 +321,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7ht-Ad-sFX">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7ht-Ad-sFX">
                                 <rect key="frame" x="0.0" y="75" width="375" height="543"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -351,16 +351,17 @@
                             <constraint firstItem="D4z-xI-2SS" firstAttribute="top" secondItem="Dw2-Ua-NEe" secondAttribute="bottom" constant="10" id="zrT-gK-snb"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Bookmarks" image="favorite" id="IoY-DY-VwL"/>
+                    <navigationItem key="navigationItem" id="0wL-sO-Ds4"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="favoriteTableView" destination="7ht-Ad-sFX" id="Sud-ON-oTg"/>
                         <outlet property="favouriteBarItem" destination="IoY-DY-VwL" id="5FQ-81-atI"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="favouriteShowPlaceSegue" id="s5o-Ox-Dya"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hps-lA-86Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1055.5" y="652.5"/>
+            <point key="canvasLocation" x="-398.5" y="913.5"/>
         </scene>
         <!--Places-->
         <scene sceneID="WMT-NY-gfQ">
@@ -559,7 +560,27 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bXi-uz-5V3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-552" y="681"/>
+            <point key="canvasLocation" x="35" y="681"/>
+        </scene>
+        <!--Bookmarks-->
+        <scene sceneID="G7d-GZ-pMF">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="Tpx-Jp-xrQ" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Bookmarks" image="favorite" id="IoY-DY-VwL"/>
+                    <toolbarItems/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="8qu-np-XLw">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="qqD-yc-cpq" kind="relationship" relationship="rootViewController" id="Sxj-yc-Q5b"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nD0-5o-ohp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-891.5" y="652.5"/>
         </scene>
     </scenes>
     <resources>
@@ -569,4 +590,7 @@
         <image name="none" width="512" height="512"/>
         <image name="places" width="35" height="35"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="s5o-Ox-Dya"/>
+    </inferredMetricsTieBreakers>
 </document>
