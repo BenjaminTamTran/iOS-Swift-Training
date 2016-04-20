@@ -20,4 +20,11 @@ let kHasTutorial = "kHasTutorial5"
 let kDateYYMMDD = DateFormatter(format: "YYYY/MM/dd")
 let accessTokenDropbox = "Sz4KEuRFprwAAAAAAAB3TolrxyQg1BMv35XfqP19PW746nMteXE70Ig8ym1Asosj"
 let uidDropbox = "241454489"
-
+let destination : (NSURL, NSHTTPURLResponse) -> NSURL = { temporaryURL, response in
+    let fileManager = NSFileManager.defaultManager()
+    let directoryURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+    // generate a unique name for this file in case we've seen it before
+    let UUID = NSUUID().UUIDString
+    let pathComponent = "\(UUID)-\(response.suggestedFilename!)"
+    return directoryURL.URLByAppendingPathComponent(pathComponent)
+}

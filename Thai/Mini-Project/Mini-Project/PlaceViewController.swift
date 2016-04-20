@@ -43,8 +43,6 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initialize()
-//        setButton()
-//        initStackView()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -88,22 +86,43 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         imageView.image = UIImage(data: place.imgTravel)
         addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(place.date), forState: .Normal)
         clearScrollView()
-        
         var xCoordinate: CGFloat = 10
-        for image in place.images as! [String] {
-            print(image)
-            let imageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
-            imageView.contentMode = UIViewContentMode.ScaleAspectFit
-            self.imagesScrollView.addSubview(imageView)
-            xCoordinate += self.imagesScrollView.frame.width
+        if let placeImage = place.images as? [String] {
+        for image in placeImage {
+            Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
+                if let (metadata, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+                    
+                    print("Dowloaded file name: \(metadata.name)")
+                    
+                    // Resize image for watch (so it's not huge)
+                    let resizedImage = self.resizeImage(image)
+                    let imgView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
+                    imgView.image = resizedImage
+                    imgView.contentMode = UIViewContentMode.ScaleAspectFit
+                    self.imagesScrollView.addSubview(imgView)
+                    xCoordinate += self.imagesScrollView.frame.width
+                } else {
+                    print("Error downloading file from Dropbox: \(error!)")
+                }
+                
+            }
         }
         var contentSize = self.imagesScrollView.contentSize
-        let width = CGFloat(self.imageNames.count)
+        let width = CGFloat(placeImage.count)
         contentSize.width = width * self.imagesScrollView.frame.width
         self.imagesScrollView.contentSize = contentSize
         let scrollPoint = CGPointMake(0.0, 0.0)
         self.imagesScrollView.setContentOffset(scrollPoint, animated: true)
+        
+        if !place.favorite {
+            favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
+        }
+        else
+        {
+            favoritePlace.setFAIcon(FAType.FAHeart, forState: .Normal)
+        }
     }
+}
     
 //    func initStackView() {
 //        self.stackImagePicked.axis = .Horizontal
@@ -179,7 +198,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 
             }, completion: nil)
     }
-    
+    var strFilePath = ""
     //Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
         let imgData = UIImageJPEGRepresentation(imageView.image!,1)
@@ -200,16 +219,37 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                             let fileNamePlaceEncode = self.namePlace!.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
                             print(fileNamePlaceEncode!)
                             let filePath = "/\(fileNamePlaceEncode!)/\(currenDateArr[0])\(self.imageNames[i])"
-                            client.files.upload(path: filePath, body: fileData!)
-                            nameImagesData.append(filePath)
+                            client.files.upload(path: filePath, body: fileData!).response { response, error in
+                                if let metadata = response {
+                                    client.files.getMetadata(path: filePath).response { response, error in
+                                        print("*** Get file metadata ***")
+                                        if let metadata = response {
+                                            if let file = metadata as? Files.FileMetadata {
+                                                self.strFilePath = filePath
+                                                print("This is a file with path: \(file.pathLower)")
+                                                print("File size: \(file.size)")
+                                                print(file.description)
+                                            }
+                                            else if let folder = metadata as? Files.FolderMetadata {
+                                                print("This is a folder with path: \(folder.pathLower)")
+                                            }
+                                        }
+                                        else
+                                        {
+                                            print(error!)
+                                        }
+                                    }
+                                }
                             }
-                    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                    let managedObjectContext = appDelegate.managedObjectContext
-                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
-                    appDelegate.saveContext()
-                    
+                            
+                        nameImagesData.append(filePath)
+                        }
+                        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                        let managedObjectContext = appDelegate.managedObjectContext
+                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
+                        appDelegate.saveContext()
                     }
-                else
+                    else
                     {
                         ///Dropbox.authorizeFromController(self)
                         let accessToken = DropboxAccessToken(accessToken: accessTokenDropbox, uid: uidDropbox)
@@ -217,8 +257,9 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                         DropboxClient.sharedClient = Dropbox.authorizedClient
                     }
                 }
-            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
-            self.navigationController?.pushViewController(secondViewController!, animated: true)
+//            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
+//            self.navigationController?.pushViewController(secondViewController!, animated: true)
+            self.navigationController?.popViewControllerAnimated(true)
         }
         else
         {
@@ -233,8 +274,6 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 alert.addAction(actionOK)
                 alert.addAction(actionCancel)
                 self.presentViewController(alert, animated: true, completion: nil)
-                
-            
         }
         
     }
@@ -284,11 +323,6 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
             }
             else
             {
-//                self.placeLabel.text = "No place selected"
-//                self.addMorePicture.hidden = true
-//                self.clearScrollView()
-//                self.saveInfor.hidden = true
-//                self.addPlaceDate.hidden = true
                 let alert = UIAlertController(title: "Search Place", message: "Please press Pick Place Location to add location ", preferredStyle: .Alert)
                 let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
                 alert.addAction(action)
@@ -385,5 +419,32 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         for view in self.imagesScrollView.subviews {
             view.removeFromSuperview()
         }
+    }
+
+    private func resizeImage(image: UIImage) -> UIImage {
+        
+        // Resize and crop to fit Apple watch (square for now, because it's easy)
+        let maxSize: CGFloat = 200.0
+        var size: CGSize?
+        
+        if image.size.width >= image.size.height {
+            size = CGSizeMake((maxSize / image.size.height) * image.size.width, maxSize)
+        } else {
+            size = CGSizeMake(maxSize, (maxSize / image.size.width) * image.size.height)
+        }
+        
+        let hasAlpha = false
+        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+        
+        UIGraphicsBeginImageContextWithOptions(size!, !hasAlpha, scale)
+        
+        let rect = CGRect(origin: CGPointZero, size: size!)
+        UIRectClip(rect)
+        image.drawInRect(rect)
+        
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return scaledImage
     }
 }

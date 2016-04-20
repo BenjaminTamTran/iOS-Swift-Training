@@ -10,6 +10,7 @@ import UIKit
 
 class FavoriteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    var place: Place?
     @IBOutlet weak var favouriteBarItem: UITabBarItem!
     var places = [Place]()
     override func viewDidLoad() {
@@ -41,11 +42,17 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
         cell.textLabel?.text = places[indexPath.row].name
         return cell
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        place = places[indexPath.row]
+
+    }
     func reloadData() {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext = appDelegate.managedObjectContext
         places = Place.allFavorite(managedObjectContext)
         favoriteTableView.reloadData()
     }
+
 
 }
