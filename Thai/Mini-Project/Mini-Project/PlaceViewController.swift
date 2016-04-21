@@ -473,6 +473,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         addMorePicture.enabled = true
         favoritePlace.enabled = true
     }
+    
     @IBAction func doneAction(sender: AnyObject) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext = appDelegate.managedObjectContext
@@ -497,6 +498,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                         client.files.upload(path: filePath, body: fileData!)
                         nameImagesData.append(filePath)
                         }
+                    
                     print(nameImagesData)
                     
                     placePick!.images = nameImagesData

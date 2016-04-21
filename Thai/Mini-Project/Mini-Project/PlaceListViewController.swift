@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SwiftyDropbox
 class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // Mark: UI's elements
@@ -76,6 +76,24 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
         
         cell.detailTextLabel?.text = historyPlace[indexPath.row].date.toShortTimeString()
         return cell
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let moc = appDelegate.managedObjectContext
+            moc.deleteObject(historyPlace[indexPath.row])
+            if let nameImages = historyPlace[indexPath.row].images as? [String] {
+                if let client = Dropbox.authorizedClient {
+                    for nameImage in nameImages {
+                        client.files.delete(path: "\(nameImage)")
+                    }
+                }
+            }
+            appDelegate.saveContext()
+            historyPlace.removeAtIndex(indexPath.row)
+            placesTableView.reloadData()
+        }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SwiftyDropbox
 class FavoriteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var place: Place?
@@ -50,6 +50,24 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
 //        viewController.placePick = place
 //        self.presentViewController(viewController, animated: true, completion: nil)
 
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let moc = appDelegate.managedObjectContext
+            moc.deleteObject(places[indexPath.row])
+            if let nameImages = places[indexPath.row].images as? [String] {
+                if let client = Dropbox.authorizedClient {
+                    for nameImage in nameImages {
+                          client.files.delete(path: "\(nameImage)")
+                    }
+                }
+            }
+            appDelegate.saveContext()
+            places.removeAtIndex(indexPath.row)
+            favoriteTableView.reloadData()
+        }
     }
     func reloadData() {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
