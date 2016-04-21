@@ -19,6 +19,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     // Mark: UI's elements
     @IBOutlet var favoritePlace: BFPaperButton!
     @IBOutlet var searchPlaceButton: BFPaperButton!
+    @IBOutlet var pickPlaceLocation: RectangleButton!
     @IBOutlet var addMorePicture: BFPaperButton!
     @IBOutlet var addPlaceDate: BFPaperButton!
     @IBOutlet var saveInfor: BFPaperButton!
@@ -26,12 +27,14 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet var placeLabel: UILabel!
     @IBOutlet var imageView: UIImageView!
+    @IBOutlet var editPlace: RectangleButton!
+    @IBOutlet var done: RectangleButton!
     
     // Mark: Class's properties
     var test: Bool?
     var selectedImages = [UIImage]()
     var imageNames = [String]()
-    var favorite: Bool?
+    var favorite: Bool = false
     var dateVisit: NSDate?
     var namePlace: String?
     var addressPlace: String?
@@ -43,6 +46,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initialize()
+
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -64,10 +68,17 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
         if let place = placePick {
             addMorePicture.hidden = false
+            addMorePicture.enabled = false
             addPlaceDate.hidden = false
+            addPlaceDate.enabled = false
+            addMorePicture.enabled = false
             favoritePlace.hidden = false
+            favoritePlace.enabled = false
             renderUIWithPlace(place)
-            placePick = nil
+            pickPlaceLocation.hidden = true
+            editPlace.hidden = false
+            saveInfor.hidden = true
+            done.hidden = true
         }
         else {
             self.searchPlaceAction(self.view)
@@ -77,6 +88,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
             addPlaceDate.hidden = true
             favoritePlace.hidden = true
             favorite = false
+            editPlace.hidden = true
+            done.hidden = true
         }
 
     }
@@ -87,6 +100,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(place.date), forState: .Normal)
         clearScrollView()
         var xCoordinate: CGFloat = 10
+        dispatch_async(dispatch_get_main_queue(),{
         if let placeImage = place.images as? [String] {
         for image in placeImage {
             Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
@@ -107,21 +121,24 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 
             }
         }
+         
         var contentSize = self.imagesScrollView.contentSize
         let width = CGFloat(placeImage.count)
+        print("\(placeImage.count)")
         contentSize.width = width * self.imagesScrollView.frame.width
         self.imagesScrollView.contentSize = contentSize
         let scrollPoint = CGPointMake(0.0, 0.0)
         self.imagesScrollView.setContentOffset(scrollPoint, animated: true)
         
         if !place.favorite {
-            favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
+            self.favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
         }
         else
         {
-            favoritePlace.setFAIcon(FAType.FAHeart, forState: .Normal)
+            self.favoritePlace.setFAIcon(FAType.FAHeart, forState: .Normal)
         }
     }
+  })
 }
     
 //    func initStackView() {
@@ -134,6 +151,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     
     // MARK: -Action when touch up inside
     @IBAction func addMorePicsAction(sender: AnyObject) {
+     
         let vc = BSImagePickerViewController()
         //customsize the ImagePicker
         vc.maxNumberOfSelections = 6
@@ -198,7 +216,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 
             }, completion: nil)
     }
-    var strFilePath = ""
+
+    
     //Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
         let imgData = UIImageJPEGRepresentation(imageView.image!,1)
@@ -208,7 +227,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 if selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
-                    Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite!, imgTravel: imgData!)
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!)
                     appDelegate.saveContext()
                 }
                 else
@@ -219,13 +238,14 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                             let fileNamePlaceEncode = self.namePlace!.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
                             print(fileNamePlaceEncode!)
                             let filePath = "/\(fileNamePlaceEncode!)/\(currenDateArr[0])\(self.imageNames[i])"
+                
                             client.files.upload(path: filePath, body: fileData!).response { response, error in
                                 if let metadata = response {
                                     client.files.getMetadata(path: filePath).response { response, error in
                                         print("*** Get file metadata ***")
                                         if let metadata = response {
                                             if let file = metadata as? Files.FileMetadata {
-                                                self.strFilePath = filePath
+                                               
                                                 print("This is a file with path: \(file.pathLower)")
                                                 print("File size: \(file.size)")
                                                 print(file.description)
@@ -246,7 +266,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                         }
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                         let managedObjectContext = appDelegate.managedObjectContext
-                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite!, imgTravel: imgData!)
+                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData!)
                         appDelegate.saveContext()
                     }
                     else
@@ -279,7 +299,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     }
     
     @IBAction func favoriteAction(sender: AnyObject) {
-        if !favorite! {
+        if !favorite {
             favorite = true
             favoritePlace.setFAIcon(FAType.FAHeart, forState: .Normal)
         }
@@ -447,4 +467,51 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         
         return scaledImage
     }
+    
+    @IBAction func editInfoPlace(sender: AnyObject) {
+        done.hidden = false
+        addMorePicture.enabled = true
+        favoritePlace.enabled = true
+    }
+    @IBAction func doneAction(sender: AnyObject) {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedObjectContext = appDelegate.managedObjectContext
+        let dataImage = placePick!.images as! [String]
+        print(nameImagesData)
+        print("\(selectedImages.count)")
+        print("\(placePick!.name)")
+        if let _ = Place.updatePlace(managedObjectContext, name: (placePick?.name)!, date: (placePick?.date)!) {
+            if let client = Dropbox.authorizedClient {
+                if selectedImages.count != 0 {
+                    for img in dataImage
+                    {
+                        client.files.delete(path: "\(img)")
+                    }
+                    
+                    let currentDate = String(NSDate().timeIntervalSince1970)
+                    let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
+                    for i in 0 ... self.selectedImages.count - 1 {
+                        let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
+                         let fileNamePlaceEncode = self.placePick!.name.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
+                        let filePath = "/\(fileNamePlaceEncode!)/\(currenDateArr[0])\(self.imageNames[i])"
+                        client.files.upload(path: filePath, body: fileData!)
+                        nameImagesData.append(filePath)
+                        }
+                    print(nameImagesData)
+                    
+                    placePick!.images = nameImagesData
+                    print("\(favorite)")
+                    print("\(placePick!.favorite)")
+                   
+                }
+                
+            }
+
+        }
+        placePick!.favorite = favorite
+        appDelegate.saveContext()
+        view.endEditing(true)
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
 }

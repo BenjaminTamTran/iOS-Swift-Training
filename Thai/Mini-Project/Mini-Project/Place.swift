@@ -60,4 +60,16 @@ class Place: NSManagedObject {
             return []
         }
     }
+    
+    class func updatePlace(moc: NSManagedObjectContext, name: String, date: NSDate) -> Place? {
+        let fetchRequest = NSFetchRequest(entityName: "Place")
+        let predict = NSPredicate(format: "(name == %@) AND (date == %@)","\(name)",date)
+        fetchRequest.predicate = predict
+        if let fetchResults = (try? moc.executeFetchRequest(fetchRequest)) as? [Place] {
+//            print("\(fetchResults.first?.images)")
+            print("\(fetchResults.first?.favorite)")
+            return fetchResults.first!
+        }
+        return nil
+    }
 }

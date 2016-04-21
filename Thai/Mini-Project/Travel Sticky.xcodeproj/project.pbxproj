@@ -463,12 +463,13 @@
 			baseConfigurationReference = 86E9FD3623FF7B645F7C3CB3 /* Pods-Travel Sticky.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tam Tam (9Z4D262E42)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tam Tam (9Z4D262E42)";
 				INFOPLIST_FILE = "Mini-Project/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesimplestudio.travelsticky;
 				PRODUCT_NAME = "Travel Sticky";
-				PROVISIONING_PROFILE = "ff9acad4-fdc0-4cb8-a491-2ae1ea31975d";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -478,12 +479,13 @@
 			baseConfigurationReference = 7B4D09E08B86423D16E7A558 /* Pods-Travel Sticky.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tam Tam (9Z4D262E42)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tam Tam (9Z4D262E42)";
 				INFOPLIST_FILE = "Mini-Project/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesimplestudio.travelsticky;
 				PRODUCT_NAME = "Travel Sticky";
-				PROVISIONING_PROFILE = "ff9acad4-fdc0-4cb8-a491-2ae1ea31975d";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
