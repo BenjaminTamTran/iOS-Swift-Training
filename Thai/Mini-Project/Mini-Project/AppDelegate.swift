@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 import GoogleMaps
 import SwiftyDropbox
+import FBSDKCoreKit
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -19,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.whiteColor()], forState: UIControlState.Selected)
         UITabBar.appearance().tintColor = UIColor.whiteColor()
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         GMSServices.provideAPIKey("AIzaSyAJcn_BuQ5DrYEu-ld9vKOAW_Aw2rZ-MyI")
         Dropbox.setupWithAppKey("y8o963u1cjeccgx")
         let accessToken = DropboxAccessToken(accessToken: accessTokenDropbox, uid: uidDropbox)
@@ -46,6 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         return false
+    }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
 
     func applicationWillResignActive(application: UIApplication) {

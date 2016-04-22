@@ -93,7 +93,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         }
 
     }
-    
+    var tempImage: [UIImage] = [UIImage]()
     func renderUIWithPlace(place: Place) {
         placeLabel.text = place.name
         imageView.image = UIImage(data: place.imgTravel)
@@ -102,6 +102,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         var xCoordinate: CGFloat = 10
         dispatch_async(dispatch_get_main_queue(),{
         if let placeImage = place.images as? [String] {
+            self.tempImage.removeAll()
         for image in placeImage {
             Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
                 if let (metadata, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
@@ -224,10 +225,11 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         let currentDate = String(NSDate().timeIntervalSince1970)
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
         if let dateVisit = dateVisit {
-                if selectedImages.count == 0 {
+              dispatch_async(dispatch_get_main_queue(),{
+                if self.selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
-                    Place.onCreateManagedObjectContext(managedObjectContext, name: namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!)
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!)
                     appDelegate.saveContext()
                 }
                 else
@@ -262,7 +264,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                                 }
                             }
                             
-                        nameImagesData.append(filePath)
+                        self.nameImagesData.append(filePath)
                         }
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                         let managedObjectContext = appDelegate.managedObjectContext
@@ -279,14 +281,16 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 }
 //            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
 //            self.navigationController?.pushViewController(secondViewController!, animated: true)
+            })
             self.navigationController?.popViewControllerAnimated(true)
+       
         }
         else
         {
             let alert = UIAlertController(title: "Error", message: "Missing Add Date", preferredStyle: .Alert)
                 let actionOK = UIAlertAction(title: "OK", style: .Default, handler: { UIAlertAction in
                     let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
-                    hsdpvc.mainColor = UIColor.yellowColor()
+                    hsdpvc.mainColor = UIColor.whiteColor()
                     hsdpvc.delegate = self
                     self.presentViewController(hsdpvc, animated: true, completion: { _ in })
                 })
@@ -353,7 +357,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     
     @IBAction func addPlaceDateAction(sender: AnyObject) {
         let hsdpvc: HSDatePickerViewController = HSDatePickerViewController()
-        hsdpvc.mainColor = UIColor.yellowColor()
+        hsdpvc.mainColor = UIColor.whiteColor()
         hsdpvc.delegate = self
         self.presentViewController(hsdpvc, animated: true, completion: { _ in })
     }
@@ -472,6 +476,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         done.hidden = false
         addMorePicture.enabled = true
         favoritePlace.enabled = true
+    
     }
     
     @IBAction func doneAction(sender: AnyObject) {

@@ -28,3 +28,4 @@ let destination : (NSURL, NSHTTPURLResponse) -> NSURL = { temporaryURL, response
     let pathComponent = "\(UUID)-\(response.suggestedFilename!)"
     return directoryURL.URLByAppendingPathComponent(pathComponent)
 }
+let FACEBOOK_PERMISSIONS = ["public_profile", "email", "user_friends"]

@@ -56,17 +56,11 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
         if editingStyle == .Delete {
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             let moc = appDelegate.managedObjectContext
-            moc.deleteObject(places[indexPath.row])
-            if let nameImages = places[indexPath.row].images as? [String] {
-                if let client = Dropbox.authorizedClient {
-                    for nameImage in nameImages {
-                          client.files.delete(path: "\(nameImage)")
-                    }
-                }
-            }
-            appDelegate.saveContext()
+            places[indexPath.row].favorite = false
             places.removeAtIndex(indexPath.row)
             favoriteTableView.reloadData()
+            appDelegate.saveContext()
+          
         }
     }
     func reloadData() {

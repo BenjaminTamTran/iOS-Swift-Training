@@ -10,5 +10,8 @@ target 'Travel Sticky' do
     pod 'BSImagePicker'
     pod 'SwiftyDropbox'
     pod 'Font-Awesome-Swift'
+    pod 'MGSwipeTableCell'
+    pod 'FBSDKLoginKit'
+    pod 'FBSDKShareKit'
 end
 

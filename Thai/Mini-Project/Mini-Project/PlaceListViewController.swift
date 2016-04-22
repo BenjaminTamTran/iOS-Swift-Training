@@ -8,7 +8,12 @@
 
 import UIKit
 import SwiftyDropbox
-class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate {
+import MGSwipeTableCell
+import FBSDKCoreKit
+import FBSDKLoginKit
+import FBSDKShareKit
+
+class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate,FBSDKSharingDelegate {
     
     // Mark: UI's elements
     @IBOutlet var placesTableView: UITableView!
@@ -18,7 +23,7 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     // Mark: Class's properties
     var historyPlace = [Place]()
     var placePick: Place?
-    
+    var imageShareFB: [UIImage] = [UIImage]()
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,11 +74,76 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     
     // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) 
+
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MGSwipeTableCell
         cell.textLabel?.text = historyPlace[indexPath.row].name
-        
+        cell.delegate = self
         cell.imageView?.image = UIImage(data: historyPlace[indexPath.row].imgTravel)
-        
+        cell.leftButtons = [MGSwipeButton(title: "ShareFacebook", backgroundColor: UIColor.redColor(), callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            print("Convenience callback for swipe buttons!")
+            
+            // download photo from dropbox
+            
+            if let placeImage = self.historyPlace[indexPath.row].images as? [String] {
+                self.imageShareFB.removeAll()
+                for image in placeImage {
+                    Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
+                        if let (metadata, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+                            
+                            print("Dowloaded file name: \(metadata.name)")
+                            
+                            // Resize image for watch (so it's not huge)
+                            let resizedImage = self.resizeImage(image)
+                            self.imageShareFB.append(resizedImage)
+                        }
+                        else
+                        {
+                            print("Error downloading file from Dropbox: \(error!)")
+                        }
+                        
+                    }
+                }
+            }
+            
+            // share facebook 
+            
+            if let _ = FBSDKAccessToken.currentAccessToken() {
+                let content = FBSDKShareLinkContent()
+//                content.contentURL = NSURL(string: kHttpLinkAppStore)
+                content.contentTitle = "This app is really cool."
+                FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)
+            }
+            else
+            {
+                let login = FBSDKLoginManager()
+                login.logInWithReadPermissions(FACEBOOK_PERMISSIONS, fromViewController: self, handler: { (result, error) -> Void in
+                    
+                    if result.isCancelled {
+                        FBSDKLoginManager().logOut()
+                    }
+                    else
+                    {
+                        // To do
+                        if let er = error {
+                            print(er.description)
+                        }
+                        else
+                        {
+                            let content = FBSDKShareLinkContent()
+//                            content.contentURL = NSURL(string: kHttpLinkAppStore)
+                            content.contentTitle = "This app is really cool."
+                            FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)
+                        }
+                    }
+                })
+            }
+   
+            return true
+          }
+       )]
+    
+        cell.leftSwipeSettings.transition = MGSwipeTransition.Static
         cell.detailTextLabel?.text = historyPlace[indexPath.row].date.toShortTimeString()
         return cell
     }
@@ -109,4 +179,42 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
             
         }
     }
+    func sharer(sharer: FBSDKSharing!, didCompleteWithResults results: [NSObject : AnyObject]!) {
+        print("didCompleteWithResults")
+    }
+    
+    func sharer(sharer: FBSDKSharing!, didFailWithError error: NSError!) {
+        print(error.description)
+    }
+    
+    func sharerDidCancel(sharer: FBSDKSharing!) {
+        print("sharerDidCancel")
+    }
+    private func resizeImage(image: UIImage) -> UIImage {
+        
+        // Resize and crop to fit Apple watch (square for now, because it's easy)
+        let maxSize: CGFloat = 200.0
+        var size: CGSize?
+        
+        if image.size.width >= image.size.height {
+            size = CGSizeMake((maxSize / image.size.height) * image.size.width, maxSize)
+        } else {
+            size = CGSizeMake(maxSize, (maxSize / image.size.width) * image.size.height)
+        }
+        
+        let hasAlpha = false
+        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+        
+        UIGraphicsBeginImageContextWithOptions(size!, !hasAlpha, scale)
+        
+        let rect = CGRect(origin: CGPointZero, size: size!)
+        UIRectClip(rect)
+        image.drawInRect(rect)
+        
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return scaledImage
+    }
+
 }
