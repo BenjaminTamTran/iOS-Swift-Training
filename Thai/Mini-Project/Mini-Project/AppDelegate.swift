@@ -21,35 +21,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.whiteColor()], forState: UIControlState.Selected)
         UITabBar.appearance().tintColor = UIColor.whiteColor()
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
         GMSServices.provideAPIKey("AIzaSyAJcn_BuQ5DrYEu-ld9vKOAW_Aw2rZ-MyI")
         Dropbox.setupWithAppKey("y8o963u1cjeccgx")
         let accessToken = DropboxAccessToken(accessToken: accessTokenDropbox, uid: uidDropbox)
         Dropbox.authorizedClient = DropboxClient(accessToken: accessToken)
         DropboxClient.sharedClient = Dropbox.authorizedClient
-        return true
+        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        print(url)
-        
-        let accessToken = DropboxAccessToken(accessToken: accessTokenDropbox, uid: uidDropbox)
-        Dropbox.authorizedClient = DropboxClient(accessToken: accessToken)
-        DropboxClient.sharedClient = Dropbox.authorizedClient
-
-//        if let authResult = Dropbox.handleRedirectURL(url) {
-//            switch authResult {
-//            case .Success(let token):
-//                print("Success! User is logged into Dropbox with token: \(token)")
-//                print("\(token.accessToken)")
-//                print("\(token.uid)")
-//            case .Error(let error, let description):
-//                print("Error \(error): \(description)")
-//            }
-//        }
-        
-        return false
-    }
+//    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+//        print(url)
+//        
+//        let accessToken = DropboxAccessToken(accessToken: accessTokenDropbox, uid: uidDropbox)
+//        Dropbox.authorizedClient = DropboxClient(accessToken: accessToken)
+//        DropboxClient.sharedClient = Dropbox.authorizedClient
+//
+////        if let authResult = Dropbox.handleRedirectURL(url) {
+////            switch authResult {
+////            case .Success(let token):
+////                print("Success! User is logged into Dropbox with token: \(token)")
+////                print("\(token.accessToken)")
+////                print("\(token.uid)")
+////            case .Error(let error, let description):
+////                print("Error \(error): \(description)")
+////            }
+////        }
+//        
+//        return false
+//    }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
@@ -72,6 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(application: UIApplication) {
