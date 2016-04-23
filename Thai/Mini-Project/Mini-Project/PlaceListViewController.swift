@@ -72,12 +72,11 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     
     // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MGSwipeTableCell
         cell.textLabel?.text = historyPlace[indexPath.row].name
         cell.delegate = self
         cell.imageView?.image = UIImage(data: historyPlace[indexPath.row].imgTravel)
-        cell.leftButtons = [MGSwipeButton(title: "ShareFacebook", backgroundColor: UIColor.redColor(), callback: {
+        cell.leftButtons = [MGSwipeButton(title: "share Facebook", backgroundColor: Utility.facebookColor(), callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             print("Convenience callback for swipe buttons!")
             // download photo from dropbox

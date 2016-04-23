@@ -96,6 +96,10 @@ class Utility {
         return UIColor(red: 102.0/255.0, green: 102.0/255.0, blue: 102.0/255.0, alpha: 1.0)
     }
     
+    class func facebookColor() -> UIColor {
+        return UIColor(red: 70.0/255.0, green: 98.0/255.0, blue: 158.0/255.0, alpha: 1.0)
+    }
+    
     class func currencyList() -> [String] {
         var myArray = [String]()
         if let path = NSBundle.mainBundle().pathForResource("Currency", ofType: "plist") {
