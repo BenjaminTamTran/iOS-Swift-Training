@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import GoogleMaps
 class Place: NSManagedObject {
     @NSManaged var name: String
     @NSManaged var address: String
@@ -15,7 +16,16 @@ class Place: NSManagedObject {
     @NSManaged var images: AnyObject
     @NSManaged var favorite: Bool
     @NSManaged var imgTravel: NSData
-    
+    @NSManaged var latitude: Double
+    @NSManaged var longitude: Double
+    @NSManaged var web: String?
+
+    lazy var webURL: NSURL? = {
+        if let str = self.web {
+            return NSURL(fileURLWithPath: str)
+        }
+        return nil
+    }()
 //    lazy var imagesString: [String]? = {
 //        if let imagesStr = self.images as? [String] {
 //            var strTemp = [String]()
@@ -28,7 +38,7 @@ class Place: NSManagedObject {
 //        }
 //        return nil
 //    }()
-    class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool, imgTravel: NSData) -> Place {
+    class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool, imgTravel: NSData, longitude: Double, latitude: Double, web: NSURL?) -> Place {
         let place = NSEntityDescription.insertNewObjectForEntityForName("Place", inManagedObjectContext: moc) as! Place
             place.name = name
             place.address = address
@@ -36,6 +46,11 @@ class Place: NSManagedObject {
             place.images = images
             place.favorite = favorite
             place.imgTravel = imgTravel
+            place.latitude = latitude
+            place.longitude = longitude
+            if let web = web {
+                place.web = web.absoluteString
+            }
         return place
     }
     

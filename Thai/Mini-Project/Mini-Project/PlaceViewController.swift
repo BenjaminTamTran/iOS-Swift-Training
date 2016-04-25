@@ -42,6 +42,9 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     var nameImagesData = [String]()
     var placePicker: GMSPlacePicker?
     var placePick: Place?
+    var longitudePlace: Double?
+    var latitudePlace: Double?
+    var webPlace: NSURL?
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,7 +125,9 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 
             }
         }
-         
+           
+
+        
         var contentSize = self.imagesScrollView.contentSize
         let width = CGFloat(placeImage.count)
         print("\(placeImage.count)")
@@ -229,7 +234,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 if self.selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
-                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!)
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!, longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace)
                     appDelegate.saveContext()
                 }
                 else
@@ -268,7 +273,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                         }
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                         let managedObjectContext = appDelegate.managedObjectContext
-                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData!)
+                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData!,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace)
                         appDelegate.saveContext()
                     }
                     else
@@ -338,6 +343,9 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 self.namePlace = place.name
                 self.addressPlace = place.formattedAddress!
                 self.loadFirstPhotoForPlace(place.placeID)
+                self.longitudePlace = place.coordinate.longitude
+                self.latitudePlace = place.coordinate.latitude
+                self.webPlace = place.website
                 self.addMorePicture.hidden = false
                 self.saveInfor.hidden = false
                 self.addPlaceDate.hidden = false
