@@ -38,8 +38,10 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
-        cell.textLabel?.text = places[indexPath.row].name
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! FavoriteTableViewCell
+        cell.namePlace.text = places[indexPath.row].name
+        cell.timeVisit.text = places[indexPath.row].date.toShortTimeString()
+        cell.imagePlace.image = UIImage(data: places[indexPath.row].imgTravel)
         return cell
     }
     

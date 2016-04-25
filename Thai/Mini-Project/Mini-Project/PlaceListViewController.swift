@@ -72,10 +72,11 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     
     // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MGSwipeTableCell
-        cell.textLabel?.text = historyPlace[indexPath.row].name
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! PlacesTableViewCell
         cell.delegate = self
-        cell.imageView?.image = UIImage(data: historyPlace[indexPath.row].imgTravel)
+        cell.namePlace.text = historyPlace[indexPath.row].name
+        cell.imagePlace.image = UIImage(data: historyPlace[indexPath.row].imgTravel)
+        cell.timeVisit.text = historyPlace[indexPath.row].date.toShortTimeString()
         cell.leftButtons = [MGSwipeButton(title: "share Facebook", backgroundColor: Utility.facebookColor(), callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             print("Convenience callback for swipe buttons!")
@@ -99,7 +100,6 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
           }
        )]
         cell.leftSwipeSettings.transition = MGSwipeTransition.Static
-        cell.detailTextLabel?.text = historyPlace[indexPath.row].date.toShortTimeString()
         return cell
     }
     
