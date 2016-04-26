@@ -19,6 +19,7 @@ class Place: NSManagedObject {
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
     @NSManaged var web: String?
+    @NSManaged var note: String?
 
     lazy var webURL: NSURL? = {
         if let str = self.web {
@@ -38,7 +39,7 @@ class Place: NSManagedObject {
 //        }
 //        return nil
 //    }()
-    class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool, imgTravel: NSData, longitude: Double, latitude: Double, web: NSURL?) -> Place {
+    class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool, imgTravel: NSData, longitude: Double, latitude: Double, web: NSURL?, note: String?) -> Place {
         let place = NSEntityDescription.insertNewObjectForEntityForName("Place", inManagedObjectContext: moc) as! Place
             place.name = name
             place.address = address
@@ -50,6 +51,9 @@ class Place: NSManagedObject {
             place.longitude = longitude
             if let web = web {
                 place.web = web.absoluteString
+            }
+            if let note = note {
+                place.note = note
             }
         return place
     }

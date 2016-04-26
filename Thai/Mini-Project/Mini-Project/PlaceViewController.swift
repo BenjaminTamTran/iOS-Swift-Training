@@ -14,7 +14,7 @@ import BFPaperButton
 import HSDatePickerViewController
 import SwiftyDropbox
 
-class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate {
+class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate ,UITextViewDelegate {
     
     // Mark: UI's elements
     @IBOutlet var favoritePlace: BFPaperButton!
@@ -29,7 +29,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var editPlace: RectangleButton!
     @IBOutlet var done: RectangleButton!
-    
+    @IBOutlet var notePlace: UITextView!
+    var placeholderLabel: UILabel = UILabel()
     // Mark: Class's properties
     var test: Bool?
     var selectedImages = [UIImage]()
@@ -45,11 +46,15 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     var longitudePlace: Double?
     var latitudePlace: Double?
     var webPlace: NSURL?
+    var notePlaceData: String?
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initialize()
-
+    }
+    
+    func tap(gesture: UITapGestureRecognizer) {
+        notePlace.resignFirstResponder()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -69,6 +74,16 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         backButton.setFAIcon(FAType.FAChevronLeft, forState: UIControlState.Normal)
         saveInfor.setFAIcon(FAType.FASave, forState: .Normal)
         favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
+        notePlace.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(PlaceViewController.tap(_:)))
+        view.addGestureRecognizer(tapGesture)
+        placeholderLabel.text = "Enter optional text here..."
+        placeholderLabel.font = UIFont.italicSystemFontOfSize(notePlace.font!.pointSize)
+        placeholderLabel.sizeToFit()
+        notePlace.addSubview(placeholderLabel)
+        placeholderLabel.frame.origin = CGPointMake(5, notePlace.font!.pointSize / 2)
+        placeholderLabel.textColor = UIColor(white: 0, alpha: 0.3)
+        placeholderLabel.hidden = false
         if let place = placePick {
             addMorePicture.hidden = false
             addMorePicture.enabled = false
@@ -82,6 +97,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
             editPlace.hidden = false
             saveInfor.hidden = true
             done.hidden = true
+            notePlace.hidden = false
         }
         else {
             self.searchPlaceAction(self.view)
@@ -93,6 +109,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
             favorite = false
             editPlace.hidden = true
             done.hidden = true
+            notePlace.hidden = true
         }
 
     }
@@ -101,6 +118,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         placeLabel.text = place.name
         imageView.image = UIImage(data: place.imgTravel)
         addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(place.date), forState: .Normal)
+        placeholderLabel.hidden = true
+        notePlace.text = place.note
         clearScrollView()
         var xCoordinate: CGFloat = 10
         dispatch_async(dispatch_get_main_queue(),{
@@ -234,7 +253,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 if self.selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
-                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!, longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace)
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!, longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlaceData)
                     appDelegate.saveContext()
                 }
                 else
@@ -273,7 +292,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                         }
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                         let managedObjectContext = appDelegate.managedObjectContext
-                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData!,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace)
+                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData!,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlaceData)
                         appDelegate.saveContext()
                     }
                     else
@@ -351,6 +370,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 self.addPlaceDate.hidden = false
                 self.favoritePlace.hidden = false
                 self.favorite = false
+                self.notePlace.hidden = false
                 
             }
             else
@@ -529,4 +549,15 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         self.navigationController?.popViewControllerAnimated(true)
     }
     
+    func textViewDidBeginEditing(textView: UITextView) {
+        placeholderLabel.hidden = true
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        notePlaceData = notePlace.text
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 }
