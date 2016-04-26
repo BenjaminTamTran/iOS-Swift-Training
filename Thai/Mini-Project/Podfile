@@ -13,5 +13,6 @@ target 'Travel Sticky' do
     pod 'MGSwipeTableCell'
     pod 'FBSDKLoginKit'
     pod 'FBSDKShareKit'
+    pod 'CPImageViewer'
 end
 

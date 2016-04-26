@@ -477,6 +477,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Tam Tam (9Z4D262E42)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tam Tam (9Z4D262E42)";
 				INFOPLIST_FILE = "Mini-Project/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesimplestudio.travelsticky;
 				PRODUCT_NAME = "Travel Sticky";
@@ -496,6 +497,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Tam Tam (9Z4D262E42)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tam Tam (9Z4D262E42)";
 				INFOPLIST_FILE = "Mini-Project/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesimplestudio.travelsticky;
 				PRODUCT_NAME = "Travel Sticky";

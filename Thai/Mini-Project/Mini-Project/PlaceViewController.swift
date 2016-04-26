@@ -13,8 +13,9 @@ import GoogleMaps
 import BFPaperButton
 import HSDatePickerViewController
 import SwiftyDropbox
+import CPImageViewer
 
-class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate ,UITextViewDelegate {
+class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate, UITextViewDelegate  {
     
     // Mark: UI's elements
     @IBOutlet var favoritePlace: BFPaperButton!
@@ -47,6 +48,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     var latitudePlace: Double?
     var webPlace: NSURL?
     var notePlaceData: String?
+    var animationImageViewArray = [UIImageView]()
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -125,6 +127,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         dispatch_async(dispatch_get_main_queue(),{
         if let placeImage = place.images as? [String] {
             self.tempImage.removeAll()
+            //
         for image in placeImage {
             Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
                 if let (metadata, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
@@ -132,11 +135,25 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                     print("Dowloaded file name: \(metadata.name)")
                     
                     // Resize image for watch (so it's not huge)
-                    let resizedImage = self.resizeImage(image)
-                    let imgView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
-                    imgView.image = resizedImage
-                    imgView.contentMode = UIViewContentMode.ScaleAspectFit
-                    self.imagesScrollView.addSubview(imgView)
+                    //let resizedImage = self.resizeImage(image)
+                    let resizedImage = image
+//                    let imgView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
+//                    imgView.image = resizedImage
+//                    imgView.contentMode = UIViewContentMode.ScaleAspectFit
+//                    self.imagesScrollView.addSubview(imgView)
+                    
+
+                    let animationImageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
+                    animationImageView.image = resizedImage
+                    self.animationImageViewArray.append(animationImageView)
+                    animationImageView.contentMode = UIViewContentMode.ScaleAspectFit
+                    self.imagesScrollView.addSubview(animationImageView)
+                    
+                    let button = UIButton(frame: animationImageView.frame)
+                    button.addTarget(self, action: #selector(self.imageAction(_:)), forControlEvents: .TouchUpInside)
+                    button.tag = self.animationImageViewArray.indexOf(animationImageView)!
+                    self.imagesScrollView.addSubview(button)
+                    
                     xCoordinate += self.imagesScrollView.frame.width
                 } else {
                     print("Error downloading file from Dropbox: \(error!)")
@@ -144,9 +161,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
                 
             }
         }
-           
+         
 
-        
         var contentSize = self.imagesScrollView.contentSize
         let width = CGFloat(placeImage.count)
         print("\(placeImage.count)")
@@ -165,6 +181,19 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
     }
   })
 }
+ 
+    func imageAction(sender: AnyObject) {
+        if let button = sender as? UIButton
+        {
+            if button.tag < self.animationImageViewArray.count {
+                let imageView = self.animationImageViewArray[button.tag]
+                let controller = CPImageViewerViewController()
+                controller.transitioningDelegate = CPImageViewerAnimator()
+                controller.image = imageView.image
+                self.presentViewController(controller, animated: true, completion: nil)
+            }
+        }
+    }
     
 //    func initStackView() {
 //        self.stackImagePicked.axis = .Horizontal
@@ -473,32 +502,32 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate 
         }
     }
 
-    private func resizeImage(image: UIImage) -> UIImage {
-        
-        // Resize and crop to fit Apple watch (square for now, because it's easy)
-        let maxSize: CGFloat = 200.0
-        var size: CGSize?
-        
-        if image.size.width >= image.size.height {
-            size = CGSizeMake((maxSize / image.size.height) * image.size.width, maxSize)
-        } else {
-            size = CGSizeMake(maxSize, (maxSize / image.size.width) * image.size.height)
-        }
-        
-        let hasAlpha = false
-        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
-        
-        UIGraphicsBeginImageContextWithOptions(size!, !hasAlpha, scale)
-        
-        let rect = CGRect(origin: CGPointZero, size: size!)
-        UIRectClip(rect)
-        image.drawInRect(rect)
-        
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return scaledImage
-    }
+//    private func resizeImage(image: UIImage) -> UIImage {
+//        
+//        // Resize and crop to fit Apple watch (square for now, because it's easy)
+//        let maxSize: CGFloat = 1080.0
+//        var size: CGSize?
+//        
+//        if image.size.width >= image.size.height {
+//            size = CGSizeMake((maxSize / image.size.height) * image.size.width, maxSize)
+//        } else {
+//            size = CGSizeMake(maxSize, (maxSize / image.size.width) * image.size.height)
+//        }
+//        
+//        let hasAlpha = false
+//  
+//        
+//        UIGraphicsBeginImageContextWithOptions(size!, !hasAlpha, scale)
+//        
+//        let rect = CGRect(origin: CGPointZero, size: size!)
+//        UIRectClip(rect)
+//        image.drawInRect(rect)
+//        
+//        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        
+//        return scaledImage
+//    }
     
     @IBAction func editInfoPlace(sender: AnyObject) {
         done.hidden = false
