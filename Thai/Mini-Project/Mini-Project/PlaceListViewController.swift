@@ -13,17 +13,22 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import FBSDKShareKit
 
-class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate,FBSDKSharingDelegate {
+class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate,FBSDKSharingDelegate, UITextFieldDelegate {
     
     // Mark: UI's elements
     @IBOutlet var placesTableView: UITableView!
     @IBOutlet weak var addPlaceButton: UIButton!
     @IBOutlet weak var placeTabBarItem: UITabBarItem!
     
+    @IBOutlet var searchTextField: UITextField!
+  
     // Mark: Class's properties
+    
     var historyPlace = [Place]()
+    var searchDataPlace = [Place]()
     var placePick: Place?
     var imageShareFB = [FBSDKSharePhoto]()
+    var speciesSearchResults = [Place]()
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +45,8 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        searchTextField.text = ""
+        searchTextField.resignFirstResponder()
         reloadData()
     }
     
@@ -47,10 +54,18 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     private func initialize() {
         addPlaceButton.setFAIcon(FAType.FAPlus, forState: UIControlState.Normal)
         placeTabBarItem.setFAIcon(FAType.FAMapPin)
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tap))
+//        placesTableView.addGestureRecognizer(tapGesture)
+        searchTextField.autocorrectionType = .No
     }
+    
+//    func tap(gesture: UITapGestureRecognizer) {
+//        searchTextField.resignFirstResponder()
+//    }
     
     private func reloadData() {
         historyPlace = Place.allPlace(appDelegate.managedObjectContext)
+        searchDataPlace = historyPlace
         placesTableView.reloadData()
     }
     
@@ -67,21 +82,21 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return historyPlace.count
+        return searchDataPlace.count
     }
     
     // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! PlacesTableViewCell
         cell.delegate = self
-        cell.namePlace.text = historyPlace[indexPath.row].name
-        cell.imagePlace.image = UIImage(data: historyPlace[indexPath.row].imgTravel)
-        cell.timeVisit.text = historyPlace[indexPath.row].date.toShortTimeString()
+        cell.namePlace.text = searchDataPlace[indexPath.row].name
+        cell.imagePlace.image = UIImage(data: searchDataPlace[indexPath.row].imgTravel)
+        cell.timeVisit.text = searchDataPlace[indexPath.row].date.toShortTimeString()
         cell.leftButtons = [MGSwipeButton(title: "share Facebook", backgroundColor: Utility.facebookColor(), callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             print("Convenience callback for swipe buttons!")
             // download photo from dropbox
-            if let placeImage = self.historyPlace[indexPath.row].images as? [String] {
+            if let placeImage = self.searchDataPlace[indexPath.row].images as? [String] {
                 self.imageShareFB.removeAll()
                 if let image = placeImage.first {
                     Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
@@ -107,8 +122,8 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
         if editingStyle == .Delete {
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             let moc = appDelegate.managedObjectContext
-            moc.deleteObject(historyPlace[indexPath.row])
-            if let nameImages = historyPlace[indexPath.row].images as? [String] {
+            moc.deleteObject(searchDataPlace[indexPath.row])
+            if let nameImages = searchDataPlace[indexPath.row].images as? [String] {
                 if let client = Dropbox.authorizedClient {
                     for nameImage in nameImages {
                         client.files.delete(path: "\(nameImage)")
@@ -116,13 +131,13 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
                 }
             }
             appDelegate.saveContext()
-            historyPlace.removeAtIndex(indexPath.row)
+            searchDataPlace.removeAtIndex(indexPath.row)
             placesTableView.reloadData()
         }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        placePick = historyPlace[indexPath.row]
+        placePick = searchDataPlace[indexPath.row]
         self.performSegueWithIdentifier("showPlaceSegue", sender: self)
     }
     
@@ -206,6 +221,63 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
         return scaledImage
     }
     
-    
 
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let subStr = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
+        if !subStr.isEmpty {
+            searchDataPlace.removeAll()
+            for historyData in historyPlace {
+                var myString: NSString! = historyData.name
+                myString = myString.lowercaseString
+                let substringRange: NSRange! = myString.rangeOfString(subStr.lowercaseString)
+                if (substringRange.location == 0 ) {
+                    searchDataPlace.append(historyData)
+                }
+            }
+            //placesTableView.reloadData()
+        } else {
+            searchDataPlace = historyPlace
+        }
+        placesTableView.reloadData()
+        return true
+    }
+    
+    func textFieldShouldClear(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        searchDataPlace = historyPlace
+          placesTableView.reloadData()
+        textField.text = ""
+        return false
+
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        searchDataPlace = historyPlace
+        placesTableView.reloadData()
+        textField.text = ""
+        return false
+    }
+    
+//    func textFieldShouldReturn(textField: UITextField) -> Bool {
+//            textField.resignFirstResponder()
+//            searchDataPlace = historyPlace
+//            placesTableView.reloadData()
+//            return true
+//        
+//    }
+    
+//    func filterContentForSearchText(searchText: String) {
+//        // Filter the array using the filter method
+// 
+//        self.speciesSearchResults = self.historyPlace.filter({( aSpecies: Place) -> Bool in
+//            // to start, let's just search by name
+//            return aSpecies.name.lowercaseString.rangeOfString(searchText.lowercaseString) != nil
+//        })
+//    }
+//    
+//    func searchDisplayController(controller: UISearchDisplayController!, shouldReloadTableForSearchString searchString: String!) -> Bool {
+//        self.filterContentForSearchText(searchString)
+//        return true
+//    }
 }

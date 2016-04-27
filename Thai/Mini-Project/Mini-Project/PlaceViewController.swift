@@ -33,6 +33,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     @IBOutlet var notePlace: UITextView!
     var placeholderLabel: UILabel = UILabel()
     @IBOutlet var scrollView: UIScrollView!
+    
     // Mark: Class's properties
     var test: Bool?
     var selectedImages = [UIImage]()
@@ -48,11 +49,13 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     var longitudePlace: Double?
     var latitudePlace: Double?
     var webPlace: NSURL?
-    var notePlaceData: String?
-    var animationImageViewArray = [UIImageView]()
+//    var animationImageViewArray = [UIImageView]()
+    var index: Int?
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         self.initialize()
     }
     
@@ -70,6 +73,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+ 
     }
     
     // Mark: class's private methods
@@ -80,12 +84,12 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         notePlace.delegate = self
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(PlaceViewController.tap(_:)))
         view.addGestureRecognizer(tapGesture)
-        placeholderLabel.text = "Enter optional text here..."
-        placeholderLabel.font = UIFont.italicSystemFontOfSize(notePlace.font!.pointSize)
-        placeholderLabel.sizeToFit()
-        notePlace.addSubview(placeholderLabel)
-        placeholderLabel.frame.origin = CGPointMake(5, notePlace.font!.pointSize / 2)
-        placeholderLabel.textColor = UIColor(white: 0, alpha: 0.3)
+//        placeholderLabel.text = "Enter optional text here..."
+//        placeholderLabel.font = UIFont.italicSystemFontOfSize(notePlace.font!.pointSize)
+//        placeholderLabel.sizeToFit()
+//        notePlace.addSubview(placeholderLabel)
+//        placeholderLabel.frame.origin = CGPointMake(5, notePlace.font!.pointSize / 2)
+//        placeholderLabel.textColor = UIColor(white: 0, alpha: 0.3)
         placeholderLabel.hidden = false
         if let place = placePick {
             addMorePicture.hidden = false
@@ -113,6 +117,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
             editPlace.hidden = true
             done.hidden = true
             notePlace.hidden = true
+            notePlace.text = "Placeholder"
+            notePlace.textColor = UIColor.lightGrayColor()
         }
 
     }
@@ -122,13 +128,17 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         imageView.image = UIImage(data: place.imgTravel)
         addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(place.date), forState: .Normal)
         placeholderLabel.hidden = true
-        notePlace.text = place.note
+        if let notePlaces = place.note {
+            notePlace.text = notePlaces
+        }
+    
         clearScrollView()
         var xCoordinate: CGFloat = 10
         dispatch_async(dispatch_get_main_queue(),{
         if let placeImage = place.images as? [String] {
             self.tempImage.removeAll()
             //
+            
         for image in placeImage {
             Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
                 if let (metadata, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
@@ -138,21 +148,21 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                     // Resize image for watch (so it's not huge)
                     //let resizedImage = self.resizeImage(image)
                     let resizedImage = image
-//                    let imgView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
-//                    imgView.image = resizedImage
-//                    imgView.contentMode = UIViewContentMode.ScaleAspectFit
-//                    self.imagesScrollView.addSubview(imgView)
-                    
-
-                    let animationImageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
-                    animationImageView.image = resizedImage
-                    self.animationImageViewArray.append(animationImageView)
-                    animationImageView.contentMode = UIViewContentMode.ScaleAspectFit
-                    self.imagesScrollView.addSubview(animationImageView)
-                    
-                    let button = UIButton(frame: animationImageView.frame)
+                    let imgView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
+                    imgView.image = resizedImage
+                    imgView.contentMode = UIViewContentMode.ScaleAspectFit
+                    self.imagesScrollView.addSubview(imgView)
+                    self.tempImage.append(image)
+//
+//                    let animationImageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.imagesScrollView.frame.width - 20, self.imagesScrollView.frame.height - 20))
+//                    animationImageView.image = resizedImage
+//                    self.animationImageViewArray.append(animationImageView)
+//                    animationImageView.contentMode = UIViewContentMode.ScaleAspectFit
+//                    self.imagesScrollView.addSubview(animationImageView)
+                    // add
+                    let button = UIButton(frame: imgView.frame)
                     button.addTarget(self, action: #selector(self.imageAction(_:)), forControlEvents: .TouchUpInside)
-                    button.tag = self.animationImageViewArray.indexOf(animationImageView)!
+                    button.tag = self.tempImage.indexOf(image)!
                     self.imagesScrollView.addSubview(button)
                     
                     xCoordinate += self.imagesScrollView.frame.width
@@ -182,18 +192,22 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     }
   })
 }
- 
+
+
     func imageAction(sender: AnyObject) {
         if let button = sender as? UIButton
         {
-            if button.tag < self.animationImageViewArray.count {
-                let imageView = self.animationImageViewArray[button.tag]
-                let controller = CPImageViewerViewController()
-                controller.transitioningDelegate = CPImageViewerAnimator()
-                controller.image = imageView.image
-                self.presentViewController(controller, animated: true, completion: nil)
-            }
+//            if button.tag < self.animationImageViewArray.count {
+//                let imageView = self.animationImageViewArray[button.tag]
+//                let controller = CPImageViewerViewController()
+//                controller.transitioningDelegate = CPImageViewerAnimator()
+//                controller.image = imageView.image
+//                self.presentViewController(controller, animated: true, completion: nil)
+//            }
+            index = button.tag
+            self.performSegueWithIdentifier("showScrollview", sender: self)
         }
+  
     }
     
 //    func initStackView() {
@@ -283,7 +297,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                 if self.selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
-                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!, longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlaceData)
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!, longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlace.text)
                     appDelegate.saveContext()
                 }
                 else
@@ -322,7 +336,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                         }
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                         let managedObjectContext = appDelegate.managedObjectContext
-                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData!,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlaceData)
+                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData!,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlace.text)
                         appDelegate.saveContext()
                     }
                     else
@@ -579,17 +593,74 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
-        placeholderLabel.hidden = true
-        let scrollPoint = CGPointMake(0, self.addMorePicture.frame.origin.y)
-        scrollView.setContentOffset(scrollPoint, animated: true)
-    }
-    
-    func textViewDidEndEditing(textView: UITextView) {
-        notePlaceData = notePlace.text
+//    func textViewDidBeginEditing(textView: UITextView) {
+//        placeholderLabel.hidden = true
+//        let scrollPoint = CGPointMake(0, self.addMorePicture.frame.origin.y)
+//        scrollView.setContentOffset(scrollPoint, animated: true)
+//    }
+//    
+//    func textViewDidEndEditing(textView: UITextView) {
+//        notePlaceData = notePlace.text
+//    }
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        let currentText:NSString = textView.text
+        let updatedText = currentText.stringByReplacingCharactersInRange(range, withString:text)
+        
+        // If updated text view will be empty, add the placeholder
+        // and set the cursor to the beginning of the text view
+        if updatedText.isEmpty {
+            
+            textView.text = "Placeholder"
+            textView.textColor = UIColor.lightGrayColor()
+            textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.beginningOfDocument)
+            
+            return false
+        }
+            
+            // Else if the text view's placeholder is showing and the
+            // length of the replacement string is greater than 0, clear
+            // the text view and set its color to black to prepare for
+            // the user's entry
+        else if textView.textColor == UIColor.lightGrayColor() && !text.isEmpty {
+            textView.text = nil
+            textView.textColor = UIColor.blackColor()
+        }
+        
+        return true
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    var isKeybroad = false
+    func keyboardWillShow(notification: NSNotification) {
+        if isKeybroad == false {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+                self.scrollView.frame.size.height -= keyboardSize.height
+                        let scrollPoint = CGPointMake(0, self.notePlace.frame.origin.y )
+                        scrollView.setContentOffset(scrollPoint, animated: true)
+            }
+            isKeybroad = true
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if isKeybroad == true {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+                self.scrollView.frame.size.height += keyboardSize.height
+                let scrollPoint = CGPointMake(0, self.scrollView.frame.origin.y )
+                scrollView.setContentOffset(scrollPoint, animated: true)
+            }
+            isKeybroad = false
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showScrollview" {
+            if let vc = segue.destinationViewController as? ScrollViewController {
+                vc.imageArray = tempImage
+                vc.indext = index
+            }
+        }
     }
 }

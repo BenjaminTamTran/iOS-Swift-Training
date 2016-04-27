@@ -10,6 +10,7 @@
 		0574D5871CC3686F00EA3628 /* Pods_Travel_Sticky.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0507EEBD1CC353A100167E24 /* Pods_Travel_Sticky.framework */; };
 		B3647F89714AF13A2A4CCA10 /* Pods_Travel_Sticky.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D960ADD6174AEE876F50FDF2 /* Pods_Travel_Sticky.framework */; };
 		D03DF82E1CBFD21300E77401 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DF82D1CBFD21300E77401 /* Place.swift */; };
+		D073E7D11CD0F4C2009F553F /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D073E7D01CD0F4C2009F553F /* ScrollViewController.swift */; };
 		D0BCD7CA1CBB456500931420 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCD7C91CBB456500931420 /* AppDelegate.swift */; };
 		D0BCD7CC1CBB456500931420 /* PlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCD7CB1CBB456500931420 /* PlaceViewController.swift */; };
 		D0BCD7CF1CBB456500931420 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BCD7CD1CBB456500931420 /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 		7B4D09E08B86423D16E7A558 /* Pods-Travel Sticky.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Travel Sticky.release.xcconfig"; path = "Pods/Target Support Files/Pods-Travel Sticky/Pods-Travel Sticky.release.xcconfig"; sourceTree = "<group>"; };
 		86E9FD3623FF7B645F7C3CB3 /* Pods-Travel Sticky.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Travel Sticky.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Travel Sticky/Pods-Travel Sticky.debug.xcconfig"; sourceTree = "<group>"; };
 		D03DF82D1CBFD21300E77401 /* Place.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		D073E7D01CD0F4C2009F553F /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
 		D0BCD7C61CBB456500931420 /* Travel Sticky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Travel Sticky.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BCD7C91CBB456500931420 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0BCD7CB1CBB456500931420 /* PlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewController.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				F8C850541CC1EA3F00B9ABFE /* PlaceListViewController.swift */,
 				D0BCD7CB1CBB456500931420 /* PlaceViewController.swift */,
 				D0CDC1191CBBE26A00651C5D /* FavoriteViewController.swift */,
+				D073E7D01CD0F4C2009F553F /* ScrollViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				D0BCD7D21CBB456500931420 /* Mini_Project.xcdatamodeld in Sources */,
 				D0DE89481CCE624E0015B401 /* FavoriteTableViewCell.swift in Sources */,
 				F8C850501CC1E16000B9ABFE /* Utility.swift in Sources */,
+				D073E7D11CD0F4C2009F553F /* ScrollViewController.swift in Sources */,
 				F8C8504D1CC1E16000B9ABFE /* Extension.swift in Sources */,
 				D0CDC11A1CBBE26A00651C5D /* FavoriteViewController.swift in Sources */,
 				D0DE89441CCE58F70015B401 /* PlacesTableViewCell.swift in Sources */,
