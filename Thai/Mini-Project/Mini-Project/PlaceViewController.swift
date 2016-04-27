@@ -32,6 +32,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     @IBOutlet var done: RectangleButton!
     @IBOutlet var notePlace: UITextView!
     var placeholderLabel: UILabel = UILabel()
+    @IBOutlet var scrollView: UIScrollView!
     // Mark: Class's properties
     var test: Bool?
     var selectedImages = [UIImage]()
@@ -580,6 +581,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     
     func textViewDidBeginEditing(textView: UITextView) {
         placeholderLabel.hidden = true
+        let scrollPoint = CGPointMake(0, self.addMorePicture.frame.origin.y)
+        scrollView.setContentOffset(scrollPoint, animated: true)
     }
     
     func textViewDidEndEditing(textView: UITextView) {
