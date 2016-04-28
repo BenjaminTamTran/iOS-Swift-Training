@@ -10,8 +10,9 @@ import UIKit
 import RFAboutView_Swift
 import FBSDKLoginKit
 import FBSDKShareKit
+import GoogleMobileAds
 
-class MoreViewController: UIViewController, FBSDKSharingDelegate {
+class MoreViewController: UIViewController, FBSDKSharingDelegate, GADInterstitialDelegate {
 
     // Mark: UI's elements
     @IBOutlet weak var rateImageView: UIImageView!
@@ -19,11 +20,13 @@ class MoreViewController: UIViewController, FBSDKSharingDelegate {
     @IBOutlet weak var aboutImageView: UIImageView!
     @IBOutlet weak var shareImageView: UIImageView!
     
+    var interstital = Utility.loadInterstitial(kAdTestDevice)
     
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initialize()
+        interstital.delegate = self
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -96,10 +99,14 @@ class MoreViewController: UIViewController, FBSDKSharingDelegate {
         self.presentViewController(aboutNav, animated: true, completion: nil)
     }
     
+    @IBAction func donateButtonAction(sender: AnyObject) {
+        Utility.displayInterstitial(&interstital, vc: self)
+    }
     // Mark: FBSDKSharingDelegate's methods
     func sharer(sharer: FBSDKSharing!, didCompleteWithResults results: [NSObject : AnyObject]!) {
         print("didCompleteWithResults")
     }
+    
     
     func sharer(sharer: FBSDKSharing!, didFailWithError error: NSError!) {
         print(error.description)

@@ -14,8 +14,9 @@ import BFPaperButton
 import HSDatePickerViewController
 import SwiftyDropbox
 import CPImageViewer
+import GoogleMobileAds
 
-class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate, UITextViewDelegate  {
+class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate, UITextViewDelegate,GADInterstitialDelegate  {
     
     // Mark: UI's elements
     @IBOutlet var favoritePlace: BFPaperButton!
@@ -50,6 +51,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     var latitudePlace: Double?
     var webPlace: NSURL?
     var imgPlace: UIImage?
+    var interstitial = Utility.loadInterstitial(kAdTestDevice)
 //    var animationImageViewArray = [UIImageView]()
     var index: Int?
     // Mark: Application's life cirlce
@@ -58,11 +60,16 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         self.initialize()
+        
+        // Admod
+        interstitial.delegate = self
+        
     }
     
     func tap(gesture: UITapGestureRecognizer) {
         notePlace.resignFirstResponder()
     }
+    
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
@@ -358,8 +365,11 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
 //            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
 //            self.navigationController?.pushViewController(secondViewController!, animated: true)
             })
+            stickyCreate += 1
+            if stickyCreate % 2 == 0 {
+                Utility.displayInterstitial(&interstitial, vc: self)
+            }
             self.navigationController?.popViewControllerAnimated(true)
-       
         }
         else
         {
@@ -676,4 +686,15 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
             }
         }
     }
+    
+    func interstitialDidFailToReceiveAdWithError(interstitial: GADInterstitial,
+                                                 error: GADRequestError) {
+        print("\(#function): \(error.localizedDescription)")
+    }
+    
+    func interstitialDidDismissScreen(interstitial: GADInterstitial) {
+        print(#function)
+       // startNewGame()
+    }
+
 }

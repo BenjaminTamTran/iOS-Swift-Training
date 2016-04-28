@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import GoogleMobileAds
 
 class Utility {
     
@@ -51,7 +52,7 @@ class Utility {
         vc.view.frame = from.view.frame
         from.addChildViewController(vc)
         from.view.addSubview(vc.view)
-        // Move the view move in from the right
+        // Move the view move in fromvare right
         CATransaction.begin()
         CATransaction.setAnimationDuration(0.3)
         let transition = CATransition()
@@ -210,6 +211,33 @@ class Utility {
                 tutorial.removeFromSuperview()
             }
         })
+    }
+    
+    class func loadInterstitial(testDevices: String) -> GADInterstitial {
+        let interstitial = GADInterstitial(adUnitID: kInterstitialID)
+        let request = GADRequest()
+        // Requests test ads on test devices.
+        //"1ba0e235b997497c84592f9bc5b11f88"
+        request.testDevices = [testDevices]
+        interstitial.loadRequest(request)
+        return interstitial
+    }
+    
+    class func loadInterstitial() -> GADInterstitial {
+        let interstitial = GADInterstitial(adUnitID: kInterstitialID)
+        let request = GADRequest()
+        // Requests test ads on test devices.
+        //"1ba0e235b997497c84592f9bc5b11f88"
+        interstitial.loadRequest(request)
+        return interstitial
+    }
+    class func displayInterstitial(inout interstitial: GADInterstitial, vc: UIViewController) {
+        if interstitial.isReady {
+            interstitial.presentFromRootViewController(vc)
+            interstitial = Utility.loadInterstitial(kAdTestDevice)
+        } else {
+            print("Load ad fail")
+        }
     }
 }
 

@@ -12,8 +12,9 @@ import MGSwipeTableCell
 import FBSDKCoreKit
 import FBSDKLoginKit
 import FBSDKShareKit
+import GoogleMobileAds
 
-class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate,FBSDKSharingDelegate, UITextFieldDelegate {
+class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate,FBSDKSharingDelegate, UITextFieldDelegate, GADInterstitialDelegate {
     
     // Mark: UI's elements
     @IBOutlet var placesTableView: UITableView!
@@ -24,6 +25,7 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
   
     // Mark: Class's properties
     
+    var interstitial = Utility.loadInterstitial(kAdTestDevice)
     var historyPlace = [Place]()
     var searchDataPlace = [Place]()
     var placePick: Place?
@@ -221,9 +223,9 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
         {
             let login = FBSDKLoginManager()
             login.logInWithReadPermissions(FACEBOOK_PERMISSIONS, fromViewController: self, handler: { (result, error) -> Void in
-                
                 if result.isCancelled {
-                    FBSDKLoginManager().logOut()
+                    //FBSDKLoginManager().logOut()
+                    Utility.displayInterstitial(&self.interstitial, vc: self)
                 }
                 else
                 {
@@ -244,14 +246,18 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     
     func sharer(sharer: FBSDKSharing!, didCompleteWithResults results: [NSObject : AnyObject]!) {
         print("didCompleteWithResults")
+        Utility.displayInterstitial(&interstitial, vc: self)
+        
     }
     
     func sharer(sharer: FBSDKSharing!, didFailWithError error: NSError!) {
         print(error.description)
+        Utility.displayInterstitial(&interstitial, vc: self)
     }
     
     func sharerDidCancel(sharer: FBSDKSharing!) {
         print("sharerDidCancel")
+        Utility.displayInterstitial(&interstitial, vc: self)
     }
     
     private func resizeImage(image: UIImage) -> UIImage {
