@@ -14,5 +14,6 @@ target 'Travel Sticky' do
     pod 'FBSDKLoginKit'
     pod 'FBSDKShareKit'
     pod 'CPImageViewer'
+    pod 'RFAboutView-Swift'
 end
 

@@ -15,7 +15,7 @@ class Place: NSManagedObject {
     @NSManaged var date: NSDate
     @NSManaged var images: AnyObject
     @NSManaged var favorite: Bool
-    @NSManaged var imgTravel: NSData
+    @NSManaged var imgTravel: NSData?
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
     @NSManaged var web: String?
@@ -39,14 +39,16 @@ class Place: NSManagedObject {
 //        }
 //        return nil
 //    }()
-    class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool, imgTravel: NSData, longitude: Double, latitude: Double, web: NSURL?, note: String?) -> Place {
+    class func onCreateManagedObjectContext(moc: NSManagedObjectContext, name: String, address: String, date: NSDate, images: [String], favorite: Bool, imgTravel: NSData?, longitude: Double, latitude: Double, web: NSURL?, note: String?) -> Place {
         let place = NSEntityDescription.insertNewObjectForEntityForName("Place", inManagedObjectContext: moc) as! Place
             place.name = name
             place.address = address
             place.date = date
             place.images = images
             place.favorite = favorite
-            place.imgTravel = imgTravel
+            if let imgTravel = imgTravel {
+                place.imgTravel = imgTravel
+            }
             place.latitude = latitude
             place.longitude = longitude
             if let web = web {

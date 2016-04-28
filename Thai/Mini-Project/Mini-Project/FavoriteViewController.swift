@@ -41,7 +41,13 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! FavoriteTableViewCell
         cell.namePlace.text = places[indexPath.row].name
         cell.timeVisit.text = places[indexPath.row].date.toShortTimeString()
-        cell.imagePlace.image = UIImage(data: places[indexPath.row].imgTravel)
+        
+//        cell.imagePlace.image = UIImage(data: places[indexPath.row].imgTravel)
+        
+        if let imagePlaceData = places[indexPath.row].imgTravel {
+            cell.imagePlace.image = UIImage(data: imagePlaceData)
+        }
+        
         return cell
     }
     

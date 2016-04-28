@@ -49,6 +49,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     var longitudePlace: Double?
     var latitudePlace: Double?
     var webPlace: NSURL?
+    var imgPlace: UIImage?
 //    var animationImageViewArray = [UIImageView]()
     var index: Int?
     // Mark: Application's life cirlce
@@ -117,15 +118,18 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
             editPlace.hidden = true
             done.hidden = true
             notePlace.hidden = true
-            notePlace.text = "Placeholder"
-            notePlace.textColor = UIColor.lightGrayColor()
         }
 
     }
     var tempImage: [UIImage] = [UIImage]()
     func renderUIWithPlace(place: Place) {
         placeLabel.text = place.name
-        imageView.image = UIImage(data: place.imgTravel)
+        if let imgPlaceData = place.imgTravel {
+            imageView.image = UIImage(data: imgPlaceData)
+        }
+        else {
+            imageView.image = UIImage(named: "cover")
+        }
         addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(place.date), forState: .Normal)
         placeholderLabel.hidden = true
         if let notePlaces = place.note {
@@ -289,7 +293,11 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     
     //Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
-        let imgData = UIImageJPEGRepresentation(imageView.image!,1)
+        var imgData: NSData?
+//        let imgData = UIImageJPEGRepresentation(imageView.image!,1)
+        if let imagePlaceTravel = imgPlace {
+           imgData = UIImageJPEGRepresentation(imagePlaceTravel,1)
+        }
         let currentDate = String(NSDate().timeIntervalSince1970)
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
         if let dateVisit = dateVisit {
@@ -297,7 +305,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                 if self.selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
-                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData!, longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlace.text)
+                    Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: [], favorite: self.favorite, imgTravel: imgData, longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlace.text)
                     appDelegate.saveContext()
                 }
                 else
@@ -336,7 +344,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                         }
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                         let managedObjectContext = appDelegate.managedObjectContext
-                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData!,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlace.text)
+                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlace.text)
                         appDelegate.saveContext()
                     }
                     else
@@ -468,6 +476,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
 
                                 } else {
                                     self.imageView.image = photo;
+                                    self.imgPlace = photo
                                 }
         }
     }
@@ -556,8 +565,6 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         let managedObjectContext = appDelegate.managedObjectContext
         let dataImage = placePick!.images as! [String]
         print(nameImagesData)
-        print("\(selectedImages.count)")
-        print("\(placePick!.name)")
         if let _ = Place.updatePlace(managedObjectContext, name: (placePick?.name)!, date: (placePick?.date)!) {
             if let client = Dropbox.authorizedClient {
                 if selectedImages.count != 0 {
@@ -639,6 +646,9 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                 self.scrollView.frame.size.height -= keyboardSize.height
                         let scrollPoint = CGPointMake(0, self.notePlace.frame.origin.y )
                         scrollView.setContentOffset(scrollPoint, animated: true)
+                if let view = scrollView.viewWithTag(321) {
+                    print(view.frame.height)
+                }
             }
             isKeybroad = true
         }
@@ -650,6 +660,9 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                 self.scrollView.frame.size.height += keyboardSize.height
                 let scrollPoint = CGPointMake(0, self.scrollView.frame.origin.y )
                 scrollView.setContentOffset(scrollPoint, animated: true)
+                if let view = scrollView.viewWithTag(321) {
+                    print(view.frame.height)
+                }
             }
             isKeybroad = false
         }

@@ -54,14 +54,16 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     private func initialize() {
         addPlaceButton.setFAIcon(FAType.FAPlus, forState: UIControlState.Normal)
         placeTabBarItem.setFAIcon(FAType.FAMapPin)
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tap))
-//        placesTableView.addGestureRecognizer(tapGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tap))
+        placesTableView.addGestureRecognizer(tapGesture)
+        view.addGestureRecognizer(tapGesture)
+        tapGesture.cancelsTouchesInView = false
         searchTextField.autocorrectionType = .No
     }
     
-//    func tap(gesture: UITapGestureRecognizer) {
-//        searchTextField.resignFirstResponder()
-//    }
+    func tap(gesture: UITapGestureRecognizer) {
+        searchTextField.resignFirstResponder()
+    }
     
     private func reloadData() {
         historyPlace = Place.allPlace(appDelegate.managedObjectContext)
@@ -88,32 +90,90 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
     // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! PlacesTableViewCell
+        let place = searchDataPlace[indexPath.row]
         cell.delegate = self
         cell.namePlace.text = searchDataPlace[indexPath.row].name
-        cell.imagePlace.image = UIImage(data: searchDataPlace[indexPath.row].imgTravel)
+//        cell.imagePlace.image = UIImage(data: searchDataPlace[indexPath.row].imgTravel)
+        if let imgPlaceData = searchDataPlace[indexPath.row].imgTravel
+        {
+            cell.imagePlace.image = UIImage(data: imgPlaceData)
+        }
         cell.timeVisit.text = searchDataPlace[indexPath.row].date.toShortTimeString()
-        cell.leftButtons = [MGSwipeButton(title: "share Facebook", backgroundColor: Utility.facebookColor(), callback: {
-            (sender: MGSwipeTableCell!) -> Bool in
-            print("Convenience callback for swipe buttons!")
-            // download photo from dropbox
-            if let placeImage = self.searchDataPlace[indexPath.row].images as? [String] {
+        
+        if let placeImage = place.images as? [String] {
+            if !placeImage.isEmpty || place.imgTravel != nil {
                 self.imageShareFB.removeAll()
-                if let image = placeImage.first {
-                    Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
-                        if let (_, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
-                            self.imageShareFB.append(FBSDKSharePhoto(image: image, userGenerated: true))
+                var leftButtons: [MGSwipeButton] = [MGSwipeButton]()
+                if !placeImage.isEmpty {
+                    leftButtons.append(
+                        MGSwipeButton(title: "share Facebook", backgroundColor: Utility.facebookColor(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+                            //
+//                            if let image = placeImage.first {
+                            for image in placeImage {
+                                Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W1024h768, destination: destination).response { response, error in
+                                    if let (_, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+                                        self.imageShareFB.append(FBSDKSharePhoto(image: image, userGenerated: true))
+//                                        self.shareToFacebook()
+                                    }
+                                    else
+                                    {
+                                        print("Error downloading file from Dropbox: \(error!)")
+                                    }
+                                }
+                            }
+                            self.shareToFacebook()
+                            return true
+                        } )
+                    )
+                } else {
+                    leftButtons.append(
+                    MGSwipeButton(title: "share Facebook", backgroundColor: Utility.facebookColor(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+                        if let imgPlaceData = self.searchDataPlace[indexPath.row].imgTravel {
+                            self.imageShareFB.removeAll()
+                            self.imageShareFB.append((FBSDKSharePhoto(image: UIImage(data: imgPlaceData), userGenerated: true)))
                             self.shareToFacebook()
                         }
-                        else
-                        {
-                            print("Error downloading file from Dropbox: \(error!)")
-                        }
-                    }
+                        return true
+                    } )
+                    )
                 }
+                cell.leftButtons = leftButtons
             }
-            return true
-          }
-       )]
+        }
+//        cell.leftButtons = [MGSwipeButton(title: "share Facebook", backgroundColor: Utility.facebookColor(), callback: {
+//            (sender: MGSwipeTableCell!) -> Bool in
+//            print("Convenience callback for swipe buttons!")
+//            // download photo from dropbox
+//            if let placeImage = self.searchDataPlace[indexPath.row].images as? [String] {
+//                self.imageShareFB.removeAll()
+//                if let image = placeImage.first {
+//                    Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
+//                        if let (_, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+//                            self.imageShareFB.append(FBSDKSharePhoto(image: image, userGenerated: true))
+//                            self.shareToFacebook()
+//                        }
+//                        else
+//                        {
+//                            print("Error downloading file from Dropbox: \(error!)")
+//                        }
+//                    }
+//                }
+//                else {
+//                    if let imgPlaceData = self.searchDataPlace[indexPath.row].imgTravel {
+//                        self.imageShareFB.removeAll()
+//                        self.imageShareFB.append((FBSDKSharePhoto(image: UIImage(data: imgPlaceData), userGenerated: true)))
+//                        self.shareToFacebook()
+//                    } else {
+//                      // to do instance don't have google Place image
+//                    }
+//  
+//                }
+//            }
+////            return true
+//            return true
+//            }
+//         
+//       )]
         cell.leftSwipeSettings.transition = MGSwipeTransition.Static
         return cell
     }

@@ -28,4 +28,9 @@ let destination : (NSURL, NSHTTPURLResponse) -> NSURL = { temporaryURL, response
     let pathComponent = "\(UUID)-\(response.suggestedFilename!)"
     return directoryURL.URLByAppendingPathComponent(pathComponent)
 }
+// Mark: AppStore
 let FACEBOOK_PERMISSIONS = ["public_profile", "email", "user_friends"]
+let kAppId = "539427747"
+let kAppStoreLink = "itms-apps://itunes.apple.com/app/id\(kAppId)"
+let kAppStoreRateLink = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(kAppId)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"
+let kHttpLinkAppStore = "https://itunes.apple.com/sg/app/english-spanish-in-use-voice/id789660618?mt=8"

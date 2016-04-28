@@ -184,6 +184,11 @@ class Utility {
         return UIColor(red: 255.0/255.0, green: 90.0/255.0, blue: 96.0/255.0, alpha: alpha.cgfloat())
     }
     
+    class func mainRedColor() -> UIColor {
+        return UIColor(red: 208.0 / 255.0, green: 2.0 / 255.0, blue: 27.0 / 255.0, alpha: 1.0)
+    }
+
+    
     class func showTutorial(view: UIView, screen: String) {
         let key = "\(kHasTutorial) for \(screen)"
         if !kUserDefault.boolForKey(key) {
