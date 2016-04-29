@@ -15,8 +15,8 @@ import HSDatePickerViewController
 import SwiftyDropbox
 import CPImageViewer
 import GoogleMobileAds
-
-class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate, UITextViewDelegate,GADInterstitialDelegate  {
+import CoreLocation
+class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate, UITextViewDelegate,GADInterstitialDelegate, CLLocationManagerDelegate {
     
     // Mark: UI's elements
     @IBOutlet var favoritePlace: BFPaperButton!
@@ -52,6 +52,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     var webPlace: NSURL?
     var imgPlace: UIImage?
     var interstitial = Utility.loadInterstitial(kAdTestDevice)
+    let locationManager = CLLocationManager()
+    var placesClient = GMSPlacesClient()
 //    var animationImageViewArray = [UIImageView]()
     var index: Int?
     // Mark: Application's life cirlce
@@ -60,10 +62,16 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         self.initialize()
+        //
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        locationManager.requestLocation()
+        locationManager.startUpdatingLocation()
+        
         
         // Admod
         interstitial.delegate = self
-        
     }
     
     func tap(gesture: UITapGestureRecognizer) {
@@ -92,6 +100,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         notePlace.delegate = self
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(PlaceViewController.tap(_:)))
         view.addGestureRecognizer(tapGesture)
+
+        
 //        placeholderLabel.text = "Enter optional text here..."
 //        placeholderLabel.font = UIFont.italicSystemFontOfSize(notePlace.font!.pointSize)
 //        placeholderLabel.sizeToFit()
@@ -297,9 +307,10 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
             }, completion: nil)
     }
 
-    
+    var checkSuccess = 0
     //Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
+        checkSuccess = 0
         var imgData: NSData?
 //        let imgData = UIImageJPEGRepresentation(imageView.image!,1)
         if let imagePlaceTravel = imgPlace {
@@ -309,6 +320,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
         if let dateVisit = dateVisit {
               dispatch_async(dispatch_get_main_queue(),{
+                Utility.showIndicatorForView(self.view)
                 if self.selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
@@ -328,6 +340,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                                 if let metadata = response {
                                     client.files.getMetadata(path: filePath).response { response, error in
                                         print("*** Get file metadata ***")
+                                        self.checkSuccess += 1
                                         if let metadata = response {
                                             if let file = metadata as? Files.FileMetadata {
                                                
@@ -342,6 +355,10 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                                         else
                                         {
                                             print(error!)
+                                        }
+                                        if self.checkSuccess == self.selectedImages.count  {
+                                            Utility.removeIndicatorForView(self.view)
+                                            self.navigationController?.popViewControllerAnimated(true)
                                         }
                                     }
                                 }
@@ -362,14 +379,14 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                         DropboxClient.sharedClient = Dropbox.authorizedClient
                     }
                 }
-//            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PlaceListViewController")
-//            self.navigationController?.pushViewController(secondViewController!, animated: true)
-            })
+//                Utility.removeIndicatorForView(self.view)
+//                self.navigationController?.popViewControllerAnimated(true)
+              })
             stickyCreate += 1
             if stickyCreate % 2 == 0 {
                 Utility.displayInterstitial(&interstitial, vc: self)
             }
-            self.navigationController?.popViewControllerAnimated(true)
+            
         }
         else
         {
@@ -403,45 +420,69 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         view.endEditing(true)
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
+    var isPickPlace = false
     @IBAction func searchPlaceAction(sender: AnyObject) {
-        let center = CLLocationCoordinate2DMake(10.762689, 106.68234)
-        let northEast = CLLocationCoordinate2DMake(center.latitude + 0.001, center.longitude + 0.001)
-        let southWest = CLLocationCoordinate2DMake(center.latitude - 0.001, center.longitude - 0.001)
-        let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
-        let config = GMSPlacePickerConfig(viewport: viewport)
-        placePicker = GMSPlacePicker(config: config)
-        
-        placePicker?.pickPlaceWithCallback({ (place: GMSPlace?, error: NSError?) -> Void in
-            if let error = error {
-                print("Pick Place error: \(error.localizedDescription)")
-                return
-            }
-            if let place = place {
-                self.placeLabel.text = place.name
-                print("Place address \(place.formattedAddress)")
-                print("Place attributions \(place.attributions)")
-                self.namePlace = place.name
-                self.addressPlace = place.formattedAddress!
-                self.loadFirstPhotoForPlace(place.placeID)
-                self.longitudePlace = place.coordinate.longitude
-                self.latitudePlace = place.coordinate.latitude
-                self.webPlace = place.website
-                self.addMorePicture.hidden = false
-                self.saveInfor.hidden = false
-                self.addPlaceDate.hidden = false
-                self.favoritePlace.hidden = false
-                self.favorite = false
-                self.notePlace.hidden = false
-                
-            }
-            else
+        self.view.endEditing(true)
+        var center = CLLocationCoordinate2DMake(37.788204, -122.411937)
+        placesClient = GMSPlacesClient()
+        Utility.showIndicatorForView(self.view)
+        placesClient.currentPlaceWithCallback({ (placeLikelihoods, error) -> Void in
+            Utility.removeIndicatorForView(self.view)
+            if error != nil
             {
-                let alert = UIAlertController(title: "Search Place", message: "Please press Pick Place Location to add location ", preferredStyle: .Alert)
-                let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
-                alert.addAction(action)
-                self.presentViewController(alert, animated: true, completion: nil)
+                print("Current Place error: \(error!.localizedDescription)")
+            } else {
+                if let placeLikelihoods = placeLikelihoods {
+                    if let place = placeLikelihoods.likelihoods.first?.place {
+                        center = CLLocationCoordinate2DMake(place.coordinate.latitude, place.coordinate.longitude)
+                    }
+                }
             }
+            let northEast = CLLocationCoordinate2DMake(center.latitude + 0.001, center.longitude + 0.001)
+            let southWest = CLLocationCoordinate2DMake(center.latitude - 0.001, center.longitude - 0.001)
+            let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
+            let config = GMSPlacePickerConfig(viewport: viewport)
+            self.placePicker = GMSPlacePicker(config: config)
+            if self.isPickPlace == true {
+                return
+            } else {
+                self.isPickPlace = true
+            }
+            self.placePicker?.pickPlaceWithCallback({ (place: GMSPlace?, error: NSError?) -> Void in
+                self.isPickPlace = false
+                
+                if let error = error {
+                    print("Pick Place error: \(error.localizedDescription)")
+                    return
+                }
+                if let place = place {
+                    self.placeLabel.text = place.name
+                    print("Place address \(place.formattedAddress)")
+                    print("Place attributions \(place.attributions)")
+                    self.namePlace = place.name
+                    self.addressPlace = place.formattedAddress!
+                    self.loadFirstPhotoForPlace(place.placeID)
+                    self.longitudePlace = place.coordinate.longitude
+                    self.latitudePlace = place.coordinate.latitude
+                    self.webPlace = place.website
+                    self.addMorePicture.hidden = false
+                    self.saveInfor.hidden = false
+                    self.addPlaceDate.hidden = false
+                    self.favoritePlace.hidden = false
+                    self.favorite = false
+                    self.notePlace.hidden = false
+                    
+                }
+                else
+                {
+                    let alert = UIAlertController(title: "Search Place", message: "Please press Pick Place Location to add location ", preferredStyle: .Alert)
+                    let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+                    alert.addAction(action)
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+                
+                self.isPickPlace = false
+            })
         })
     }
     
@@ -569,14 +610,16 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         favoritePlace.enabled = true
     
     }
-    
+    var checkSuccessDone = 0
     @IBAction func doneAction(sender: AnyObject) {
+        var checkSuccessDone = 0
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext = appDelegate.managedObjectContext
         let dataImage = placePick!.images as! [String]
         print(nameImagesData)
         if let _ = Place.updatePlace(managedObjectContext, name: (placePick?.name)!, date: (placePick?.date)!) {
             if let client = Dropbox.authorizedClient {
+                Utility.showIndicatorForView(self.view)
                 if selectedImages.count != 0 {
                     for img in dataImage
                     {
@@ -586,12 +629,16 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                     let currentDate = String(NSDate().timeIntervalSince1970)
                     let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
                     for i in 0 ... self.selectedImages.count - 1 {
+                        checkSuccessDone += 1
                         let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
                          let fileNamePlaceEncode = self.placePick!.name.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
                         let filePath = "/\(fileNamePlaceEncode!)/\(currenDateArr[0])\(self.imageNames[i])"
                         client.files.upload(path: filePath, body: fileData!)
                         nameImagesData.append(filePath)
+                        if self.checkSuccessDone == self.selectedImages.count  {
+                            Utility.removeIndicatorForView(self.view)
                         }
+                    }
                     
                     print(nameImagesData)
                     
@@ -696,5 +743,15 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         print(#function)
        // startNewGame()
     }
-
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError){
+        print("error")
+    }
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let userLocation: CLLocation = locations[0]
+        let location = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
+//        locationManager.location = location
+        print(locationManager.location)
+    }
+  
 }

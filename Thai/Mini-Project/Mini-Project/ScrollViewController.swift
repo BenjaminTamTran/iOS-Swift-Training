@@ -7,8 +7,8 @@
 //
 
 import UIKit
-
-class ScrollViewController: UIViewController {
+import CPImageViewer
+class ScrollViewController: UIViewController, UIScrollViewDelegate {
     
     
    @IBOutlet var scrollView: UIScrollView!
@@ -42,7 +42,10 @@ class ScrollViewController: UIViewController {
         let animationImageView = UIImageView(frame: CGRectMake(xCoordinate, 10, self.scrollView.frame.width - 20, self.scrollView.frame.height - 20))
         animationImageView.image = image
         animationImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        animationImageView.layer.cornerRadius = 11.0
+        animationImageView.clipsToBounds = false
         self.scrollView.addSubview(animationImageView)
+        
         xCoordinate += self.scrollView.frame.width
         }
         let position = CGFloat(indext!) * scrollView.frame.width
@@ -52,6 +55,12 @@ class ScrollViewController: UIViewController {
         let width = CGFloat(imageArray.count)
         contentSize.width = width * self.scrollView.frame.width
         self.scrollView.contentSize = contentSize
+        scrollView.alwaysBounceVertical = false
+        scrollView.alwaysBounceHorizontal = false
+        scrollView.flashScrollIndicators()
+        scrollView.minimumZoomScale = 1
+        scrollView.maximumZoomScale = 10.0
+        
     }
     
     func clearScrollView() {
@@ -59,6 +68,11 @@ class ScrollViewController: UIViewController {
             view.removeFromSuperview()
         }
     }
+//    
+//    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+//        
+////        self.
+//    }
     /*
     // MARK: - Navigation
 
