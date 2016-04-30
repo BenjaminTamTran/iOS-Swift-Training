@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Property
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        TestFairy.begin("2a1d4eaccf844134fb596fbb35b12b32fe1b7dbe")
         UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.whiteColor()], forState: UIControlState.Selected)
         UITabBar.appearance().tintColor = UIColor.whiteColor()
         

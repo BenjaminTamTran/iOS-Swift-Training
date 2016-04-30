@@ -3,3 +3,4 @@
 //
 
 #import <MGSwipeTableCell/MGSwipeTableCell.h>
+#import "TestFairy.h"
