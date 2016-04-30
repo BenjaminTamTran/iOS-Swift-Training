@@ -150,6 +150,7 @@ class Utility {
     
     class func showIndicatorForView(view: UIView) {
         let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        indicatorView.color = UIColor.blackColor()
         indicatorView.tag = 2601
         indicatorView.center = view.center
         indicatorView.startAnimating()

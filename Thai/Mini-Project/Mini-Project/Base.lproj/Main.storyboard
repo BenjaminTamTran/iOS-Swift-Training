@@ -303,7 +303,7 @@
                                 <rect key="frame" x="0.0" y="83" width="375" height="535"/>
                                 <subviews>
                                     <view tag="321" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6zE-qA-R4L">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="867"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="767"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place photo" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBm-pb-wD6">
                                                 <rect key="frame" x="20" y="10" width="125" height="20"/>
@@ -527,7 +527,7 @@
                             <constraint firstItem="RcQ-iG-h5i" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="SHg-Ko-Xcc"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="gei-Eh-Ihy" secondAttribute="bottom" id="VOA-nf-RYN"/>
                             <constraint firstItem="RcQ-iG-h5i" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="1/8" id="Yhk-I9-Rt5"/>
-                            <constraint firstItem="6zE-qA-R4L" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="1.3" id="aan-DU-eNB"/>
+                            <constraint firstItem="6zE-qA-R4L" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="1.15" id="aan-DU-eNB"/>
                             <constraint firstItem="gei-Eh-Ihy" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="fwh-2b-p6O"/>
                             <constraint firstItem="1q1-Ts-z7B" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="g9t-w9-d49"/>
                             <constraint firstItem="gei-Eh-Ihy" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="lL1-fL-tXq"/>
