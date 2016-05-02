@@ -614,7 +614,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         let userLocation: CLLocation = locations[0]
         _ = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
 //        locationManager.location = location
-        print(locationManager.location)
+//        print(locationManager.location)
     }
     
     func loadFirstPhotoForPlace(placeID: String) {

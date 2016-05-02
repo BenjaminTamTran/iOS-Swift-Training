@@ -36,9 +36,9 @@
 /* Begin PBXFileReference section */
 		0507EEBD1CC353A100167E24 /* Pods_Travel_Sticky.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_Travel_Sticky.framework; path = "../../../Library/Developer/Xcode/DerivedData/Travel_Sticky-hasouwyftshotidpkazwmbxqzkoq/Build/Products/Debug-iphonesimulator/Pods_Travel_Sticky.framework"; sourceTree = "<group>"; };
 		7B4D09E08B86423D16E7A558 /* Pods-Travel Sticky.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Travel Sticky.release.xcconfig"; path = "Pods/Target Support Files/Pods-Travel Sticky/Pods-Travel Sticky.release.xcconfig"; sourceTree = "<group>"; };
-		84841EF61CD50494009FA0DC /* libTestFairy.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFairy.a; sourceTree = "<group>"; };
+		84841EF61CD50494009FA0DC /* libTestFairy.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFairy.a; path = ../libTestFairy.a; sourceTree = "<group>"; };
 		84841EF71CD50494009FA0DC /* TestFairy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestFairy.h; path = ../TestFairy.h; sourceTree = "<group>"; };
-		84841EF81CD50494009FA0DC /* upload-dsym.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "upload-dsym.sh"; sourceTree = "<group>"; };
+		84841EF81CD50494009FA0DC /* upload-dsym.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "upload-dsym.sh"; path = "../upload-dsym.sh"; sourceTree = "<group>"; };
 		86E9FD3623FF7B645F7C3CB3 /* Pods-Travel Sticky.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Travel Sticky.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Travel Sticky/Pods-Travel Sticky.debug.xcconfig"; sourceTree = "<group>"; };
 		D03DF82D1CBFD21300E77401 /* Place.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		D073E7D01CD0F4C2009F553F /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
@@ -101,8 +101,6 @@
 		D0BCD7BD1CBB456500931420 = {
 			isa = PBXGroup;
 			children = (
-				84841EF61CD50494009FA0DC /* libTestFairy.a */,
-				84841EF81CD50494009FA0DC /* upload-dsym.sh */,
 				D0BCD7C81CBB456500931420 /* Travel Sticky */,
 				D0BCD7C71CBB456500931420 /* Products */,
 				AF619D51E5928189A8E18AEB /* Pods */,
@@ -126,11 +124,21 @@
 				F8C850461CC1E09500B9ABFE /* Views */,
 				F8C850481CC1E0A000B9ABFE /* Utility */,
 				F8C850451CC1E08C00B9ABFE /* Models */,
+				F8B341401CD7176400526B41 /* Third party */,
 				D0BCD7D31CBB456500931420 /* Assets.xcassets */,
 				D0BCD7D81CBB456500931420 /* Info.plist */,
 			);
 			name = "Travel Sticky";
 			path = "Mini-Project";
+			sourceTree = "<group>";
+		};
+		F8B341401CD7176400526B41 /* Third party */ = {
+			isa = PBXGroup;
+			children = (
+				84841EF61CD50494009FA0DC /* libTestFairy.a */,
+				84841EF81CD50494009FA0DC /* upload-dsym.sh */,
+			);
+			name = "Third party";
 			sourceTree = "<group>";
 		};
 		F8C850451CC1E08C00B9ABFE /* Models */ = {

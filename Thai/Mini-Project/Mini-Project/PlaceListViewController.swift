@@ -95,7 +95,6 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
         let place = searchDataPlace[indexPath.row]
         cell.delegate = self
         cell.namePlace.text = searchDataPlace[indexPath.row].name
-//        cell.imagePlace.image = UIImage(data: searchDataPlace[indexPath.row].imgTravel)
         if let imgPlaceData = searchDataPlace[indexPath.row].imgTravel
         {
             cell.imagePlace.image = UIImage(data: imgPlaceData)
@@ -142,40 +141,6 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
                 cell.leftButtons = leftButtons
             }
         }
-//        cell.leftButtons = [MGSwipeButton(title: "share Facebook", backgroundColor: Utility.facebookColor(), callback: {
-//            (sender: MGSwipeTableCell!) -> Bool in
-//            print("Convenience callback for swipe buttons!")
-//            // download photo from dropbox
-//            if let placeImage = self.searchDataPlace[indexPath.row].images as? [String] {
-//                self.imageShareFB.removeAll()
-//                if let image = placeImage.first {
-//                    Dropbox.authorizedClient!.files.getThumbnail(path: "/\(image)", format: .Jpeg, size: .W640h480, destination: destination).response { response, error in
-//                        if let (_, url) = response, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
-//                            self.imageShareFB.append(FBSDKSharePhoto(image: image, userGenerated: true))
-//                            self.shareToFacebook()
-//                        }
-//                        else
-//                        {
-//                            print("Error downloading file from Dropbox: \(error!)")
-//                        }
-//                    }
-//                }
-//                else {
-//                    if let imgPlaceData = self.searchDataPlace[indexPath.row].imgTravel {
-//                        self.imageShareFB.removeAll()
-//                        self.imageShareFB.append((FBSDKSharePhoto(image: UIImage(data: imgPlaceData), userGenerated: true)))
-//                        self.shareToFacebook()
-//                    } else {
-//                      // to do instance don't have google Place image
-//                    }
-//  
-//                }
-//            }
-////            return true
-//            return true
-//            }
-//         
-//       )]
         cell.leftSwipeSettings.transition = MGSwipeTransition.Static
         return cell
     }

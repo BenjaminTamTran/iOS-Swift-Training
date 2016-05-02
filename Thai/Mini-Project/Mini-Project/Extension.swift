@@ -107,7 +107,7 @@ extension NSDate
     {
         //Get Short Time String
         let formatter = NSDateFormatter()
-        formatter.dateFormat = "EEEE-dd-MMMM-yyyy"
+        formatter.dateFormat = "EEEE, MMMM dd yyyy"
         let timeString = formatter.stringFromDate(self)
         //Return Short Time String
         return timeString
