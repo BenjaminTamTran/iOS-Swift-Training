@@ -316,7 +316,6 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
         if let _ = dateVisit {
               dispatch_async(dispatch_get_main_queue(),{
-                Utility.showIndicatorForView(self.view)
                 if self.selectedImages.count == 0 {
                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                     let managedObjectContext = appDelegate.managedObjectContext
@@ -326,6 +325,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                 else
                 {
                     if let client = Dropbox.authorizedClient {
+                        Utility.showIndicatorForView(self.view)
                         for i in 0 ... self.selectedImages.count - 1 {
                             let fileData = UIImageJPEGRepresentation(self.selectedImages[i], 1)
                             let fileNamePlaceEncode = self.namePlace!.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
@@ -362,9 +362,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                             
                         self.nameImagesData.append(filePath)
                         }
-                        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                        let managedObjectContext = appDelegate.managedObjectContext
-                        Place.onCreateManagedObjectContext(managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlace.text)
+                        Place.onCreateManagedObjectContext(appDelegate.managedObjectContext, name: self.namePlace!, address: self.addressPlace!, date: self.dateVisit!, images: self.nameImagesData, favorite: self.favorite, imgTravel: imgData,longitude: self.longitudePlace!, latitude: self.latitudePlace!, web: self.webPlace, note: self.notePlace.text)
                         appDelegate.saveContext()
                     }
                     else
@@ -375,8 +373,8 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                         DropboxClient.sharedClient = Dropbox.authorizedClient
                     }
                 }
-//                Utility.removeIndicatorForView(self.view)
-//                self.navigationController?.popViewControllerAnimated(true)
+                Utility.removeIndicatorForView(self.view)
+                self.navigationController?.popViewControllerAnimated(true)
               })
             stickyCreate += 1
             if stickyCreate % 2 == 0 {

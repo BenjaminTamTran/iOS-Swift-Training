@@ -258,10 +258,8 @@ class PlaceListViewControllerr: UIViewController, UITableViewDataSource, UITable
         if !subStr.isEmpty {
             searchDataPlace.removeAll()
             for historyData in historyPlace {
-                var myString: NSString! = historyData.name
-                myString = myString.lowercaseString
-                let substringRange: NSRange! = myString.rangeOfString(subStr.lowercaseString)
-                if (substringRange.location == 0 ) {
+                let myString: NSString! = historyData.name.lowercaseString
+                if myString.containsString(subStr) {
                     searchDataPlace.append(historyData)
                 }
             }
