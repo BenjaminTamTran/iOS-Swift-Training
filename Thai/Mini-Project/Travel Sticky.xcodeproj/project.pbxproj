@@ -21,7 +21,6 @@
 		D0BCD7D71CBB456500931420 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BCD7D51CBB456500931420 /* LaunchScreen.storyboard */; };
 		D0CDC11A1CBBE26A00651C5D /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CDC1191CBBE26A00651C5D /* FavoriteViewController.swift */; };
 		D0DE89441CCE58F70015B401 /* PlacesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE89431CCE58F70015B401 /* PlacesTableViewCell.swift */; };
-		D0DE89481CCE624E0015B401 /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE89471CCE624E0015B401 /* FavoriteTableViewCell.swift */; };
 		F8B3413F1CD70DE900526B41 /* KeyboardNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B3413E1CD70DE900526B41 /* KeyboardNotification.swift */; };
 		F8C8504D1CC1E16000B9ABFE /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C850491CC1E16000B9ABFE /* Extension.swift */; };
 		F8C8504E1CC1E16000B9ABFE /* FAIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C8504A1CC1E16000B9ABFE /* FAIcon.swift */; };
@@ -53,7 +52,6 @@
 		D0CDC1191CBBE26A00651C5D /* FavoriteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		D0D25C211CCA18DE00724CE4 /* Travel Sticky-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Travel Sticky-Bridging-Header.h"; sourceTree = "<group>"; };
 		D0DE89431CCE58F70015B401 /* PlacesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesTableViewCell.swift; sourceTree = "<group>"; };
-		D0DE89471CCE624E0015B401 /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
 		D960ADD6174AEE876F50FDF2 /* Pods_Travel_Sticky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Travel_Sticky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8B3413E1CD70DE900526B41 /* KeyboardNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardNotification.swift; sourceTree = "<group>"; };
 		F8C850491CC1E16000B9ABFE /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -156,7 +154,6 @@
 				D0BCD7CD1CBB456500931420 /* Main.storyboard */,
 				D0BCD7D51CBB456500931420 /* LaunchScreen.storyboard */,
 				D0DE89431CCE58F70015B401 /* PlacesTableViewCell.swift */,
-				D0DE89471CCE624E0015B401 /* FavoriteTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -375,7 +372,6 @@
 				F8C850551CC1EA3F00B9ABFE /* PlaceListViewController.swift in Sources */,
 				D0BCD7CC1CBB456500931420 /* PlaceViewController.swift in Sources */,
 				D0BCD7D21CBB456500931420 /* Mini_Project.xcdatamodeld in Sources */,
-				D0DE89481CCE624E0015B401 /* FavoriteTableViewCell.swift in Sources */,
 				F8C850501CC1E16000B9ABFE /* Utility.swift in Sources */,
 				D073E7D11CD0F4C2009F553F /* ScrollViewController.swift in Sources */,
 				F8C8504D1CC1E16000B9ABFE /* Extension.swift in Sources */,

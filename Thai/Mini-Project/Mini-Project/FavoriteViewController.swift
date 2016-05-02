@@ -38,7 +38,7 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! FavoriteTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! PlacesTableViewCell
         cell.namePlace.text = places[indexPath.row].name
         cell.timeVisit.text = places[indexPath.row].date.toShortTimeString()
         
