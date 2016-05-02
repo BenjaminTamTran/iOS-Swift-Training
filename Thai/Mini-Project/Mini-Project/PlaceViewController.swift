@@ -34,6 +34,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     @IBOutlet var notePlace: UITextView!
     var placeholderLabel: UILabel = UILabel()
     @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     // Mark: Class's properties
     var test: Bool?
@@ -54,13 +55,16 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     var interstitial = Utility.loadInterstitial(kAdTestDevice)
     let locationManager = CLLocationManager()
     var placesClient = GMSPlacesClient()
-//    var animationImageViewArray = [UIImageView]()
+    var checkSuccessDone = 0
     var index: Int?
+    var tempImage: [UIImage] = [UIImage]()
+    var checkSuccess = 0
+    var isPickPlace = false
+    
     // Mark: Application's life cirlce
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PlaceViewController.keyboardWillChangeFrameNotification(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
         self.initialize()
         //
         locationManager.delegate = self
@@ -68,16 +72,9 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         locationManager.requestAlwaysAuthorization()
         locationManager.requestLocation()
         locationManager.startUpdatingLocation()
-        
-        
         // Admod
         interstitial.delegate = self
     }
-    
-    func tap(gesture: UITapGestureRecognizer) {
-        notePlace.resignFirstResponder()
-    }
-    
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
@@ -90,6 +87,19 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
  
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showScrollview" {
+            if let vc = segue.destinationViewController as? ScrollViewController {
+                vc.imageArray = tempImage
+                vc.indext = index
+            }
+        }
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     // Mark: class's private methods
@@ -138,7 +148,11 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         }
 
     }
-    var tempImage: [UIImage] = [UIImage]()
+    
+    func tap(gesture: UITapGestureRecognizer) {
+        notePlace.resignFirstResponder()
+    }
+    
     func renderUIWithPlace(place: Place) {
         placeLabel.text = place.name
         if let imgPlaceData = place.imgTravel {
@@ -193,53 +207,36 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                 
             }
         }
-         
-
-        var contentSize = self.imagesScrollView.contentSize
-        let width = CGFloat(placeImage.count)
-        print("\(placeImage.count)")
-        contentSize.width = width * self.imagesScrollView.frame.width
-        self.imagesScrollView.contentSize = contentSize
-        let scrollPoint = CGPointMake(0.0, 0.0)
-        self.imagesScrollView.setContentOffset(scrollPoint, animated: true)
-        
-        if !place.favorite {
-            self.favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
+            var contentSize = self.imagesScrollView.contentSize
+            let width = CGFloat(placeImage.count)
+            print("\(placeImage.count)")
+            contentSize.width = width * self.imagesScrollView.frame.width
+            self.imagesScrollView.contentSize = contentSize
+            let scrollPoint = CGPointMake(0.0, 0.0)
+            self.imagesScrollView.setContentOffset(scrollPoint, animated: true)
+            
+            if !place.favorite {
+                self.favoritePlace.setFAIcon(FAType.FAHeartO, forState: .Normal)
+            }
+            else
+            {
+                self.favoritePlace.setFAIcon(FAType.FAHeart, forState: .Normal)
+            }
         }
-        else
-        {
-            self.favoritePlace.setFAIcon(FAType.FAHeart, forState: .Normal)
-        }
+      })
     }
-  })
-}
 
 
     func imageAction(sender: AnyObject) {
         if let button = sender as? UIButton
         {
-//            if button.tag < self.animationImageViewArray.count {
-//                let imageView = self.animationImageViewArray[button.tag]
-//                let controller = CPImageViewerViewController()
-//                controller.transitioningDelegate = CPImageViewerAnimator()
-//                controller.image = imageView.image
-//                self.presentViewController(controller, animated: true, completion: nil)
-//            }
             index = button.tag
             self.performSegueWithIdentifier("showScrollview", sender: self)
         }
   
     }
     
-//    func initStackView() {
-//        self.stackImagePicked.axis = .Horizontal
-//        self.stackImagePicked.distribution = .FillEqually
-//        self.stackImagePicked.alignment = .Fill
-//        self.stackImagePicked.spacing = 10
-//        self.stackImagePicked.translatesAutoresizingMaskIntoConstraints = false
-//    }
-    
-    // MARK: -Action when touch up inside
+    // MARK: Button Actions
     @IBAction func addMorePicsAction(sender: AnyObject) {
      
         let vc = BSImagePickerViewController()
@@ -307,7 +304,6 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
             }, completion: nil)
     }
 
-    var checkSuccess = 0
     //Event save touch up inside
     @IBAction func saveEventAction(sender: AnyObject) {
         checkSuccess = 0
@@ -318,7 +314,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         }
         let currentDate = String(NSDate().timeIntervalSince1970)
         let currenDateArr = currentDate.characters.split{$0 == "."}.map(String.init)
-        if let dateVisit = dateVisit {
+        if let _ = dateVisit {
               dispatch_async(dispatch_get_main_queue(),{
                 Utility.showIndicatorForView(self.view)
                 if self.selectedImages.count == 0 {
@@ -337,7 +333,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
                             let filePath = "/\(fileNamePlaceEncode!)/\(currenDateArr[0])\(self.imageNames[i])"
                 
                             client.files.upload(path: filePath, body: fileData!).response { response, error in
-                                if let metadata = response {
+                                if let _ = response {
                                     client.files.getMetadata(path: filePath).response { response, error in
                                         print("*** Get file metadata ***")
                                         self.checkSuccess += 1
@@ -420,7 +416,7 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         view.endEditing(true)
         self.navigationController?.popViewControllerAnimated(true)
     }
-    var isPickPlace = false
+    
     @IBAction func searchPlaceAction(sender: AnyObject) {
         self.view.endEditing(true)
         var center = CLLocationCoordinate2DMake(37.788204, -122.411937)
@@ -493,124 +489,13 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         self.presentViewController(hsdpvc, animated: true, completion: { _ in })
     }
     
-    func hsDatePickerPickedDate(date: NSDate!) {
-        dateVisit = date
-        addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(date), forState: .Normal)
-    }
-    
-    func loadFirstPhotoForPlace(placeID: String) {
-        GMSPlacesClient.sharedClient().lookUpPhotosForPlaceID(placeID) { (photos, error) -> Void in
-            if let error = error {
-                print("Error: \(error.description)")
-            } else {
-                if let firstPhoto = photos?.results.first {
-                    self.loadImageForMetadata(firstPhoto)
-                }
-                else {
-                    let alert = UIAlertController(title: "Search Image", message: "Don't have image for this place", preferredStyle: .Alert)
-                    let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
-                    alert.addAction(action)
-                    self.presentViewController(alert, animated: true, completion: nil)
-                    self.imageView.image = UIImage(named: "cover")
-                }
-            }
-        }
-    }
-    
-    func loadImageForMetadata(photoMetadata: GMSPlacePhotoMetadata) {
-        GMSPlacesClient.sharedClient()
-            .loadPlacePhoto(photoMetadata, constrainedToSize: imageView.bounds.size,
-                            scale: self.imageView.window!.screen.scale) { (photo, error) -> Void in
-                                if let error = error {
-                                    // TODO: handle the error.
-                                    print("Error: \(error.description)")
-
-                                } else {
-                                    self.imageView.image = photo;
-                                    self.imgPlace = photo
-                                }
-        }
-    }
-
-    // set button 
-    func setButton(){
-//        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-//        favoritePlace.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-//        favoritePlace.backgroundColor = UIColor(red: 1, green: 0, blue: 0.1, alpha: 0.5)
-//        favoritePlace.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
-//        favoritePlace.isRaised = true
-//        favoritePlace.cornerRadius = favoritePlace.frame.size.width / 2
-//        favoritePlace.rippleFromTapLocation = false
-//        favoritePlace.rippleBeyondBounds = true
-        
-        
-//        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-//        searchPlaceButton.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-//        searchPlaceButton.backgroundColor = UIColor(red: 0.3, green: 0, blue: 1, alpha: 1)
-//        searchPlaceButton.tapCircleColor = UIColor(red: 1, green: 0, blue: 1, alpha: 0.6)
-//        searchPlaceButton.isRaised = true
-//        searchPlaceButton.cornerRadius = favoritePlace.frame.size.width / 2
-//        searchPlaceButton.rippleFromTapLocation = false
-//        searchPlaceButton.rippleBeyondBounds = true
-//        searchPlaceButton.addTarget(self, action: #selector(PlaceViewController.searchPlace), forControlEvents: .TouchUpInside)
-        
-//        addMorePicture.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.1, alpha: 0.3)
-//        addMorePicture.setTitleColor(UIColor.blueColor(), forState: .Normal)
-//        addMorePicture.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-//        
-//        addPlaceDate.backgroundColor = UIColor(red: 0.8, green: 0.1, blue: 0.7, alpha: 0.3)
-//        addPlaceDate.setTitleColor(UIColor.blueColor(), forState: .Normal)
-//        addPlaceDate.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-//        addPlaceDate.addTarget(self, action: #selector(PlaceViewController.showDatePicker), forControlEvents: .TouchUpInside)
-        
-//        saveInfor.cornerRadius = favoritePlace.frame.size.width / 2
-//        saveInfor.setTitleColor(UIColor.blueColor(), forState: .Normal)
-//        saveInfor.backgroundColor = UIColor(red: 0.8, green: 0.6, blue: 0.7, alpha: 0.3)
-//        saveInfor.rippleFromTapLocation = false
-        
-    }
-    
-    //# MARK: - remove all sub view from scroll view
-    func clearScrollView() {
-        for view in self.imagesScrollView.subviews {
-            view.removeFromSuperview()
-        }
-    }
-
-//    private func resizeImage(image: UIImage) -> UIImage {
-//        
-//        // Resize and crop to fit Apple watch (square for now, because it's easy)
-//        let maxSize: CGFloat = 1080.0
-//        var size: CGSize?
-//        
-//        if image.size.width >= image.size.height {
-//            size = CGSizeMake((maxSize / image.size.height) * image.size.width, maxSize)
-//        } else {
-//            size = CGSizeMake(maxSize, (maxSize / image.size.width) * image.size.height)
-//        }
-//        
-//        let hasAlpha = false
-//  
-//        
-//        UIGraphicsBeginImageContextWithOptions(size!, !hasAlpha, scale)
-//        
-//        let rect = CGRect(origin: CGPointZero, size: size!)
-//        UIRectClip(rect)
-//        image.drawInRect(rect)
-//        
-//        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
-//        
-//        return scaledImage
-//    }
-    
     @IBAction func editInfoPlace(sender: AnyObject) {
         done.hidden = false
         addMorePicture.enabled = true
         favoritePlace.enabled = true
     
     }
-    var checkSuccessDone = 0
+    
     @IBAction func doneAction(sender: AnyObject) {
         var checkSuccessDone = 0
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -657,15 +542,6 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-//    func textViewDidBeginEditing(textView: UITextView) {
-//        placeholderLabel.hidden = true
-//        let scrollPoint = CGPointMake(0, self.addMorePicture.frame.origin.y)
-//        scrollView.setContentOffset(scrollPoint, animated: true)
-//    }
-//    
-//    func textViewDidEndEditing(textView: UITextView) {
-//        notePlaceData = notePlace.text
-//    }
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         let currentText:NSString = textView.text
         let updatedText = currentText.stringByReplacingCharactersInRange(range, withString:text)
@@ -693,45 +569,32 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
         return true
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    var isKeybroad = false
-    func keyboardWillShow(notification: NSNotification) {
-        if isKeybroad == false {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-                self.scrollView.frame.size.height -= keyboardSize.height
-                        let scrollPoint = CGPointMake(0, self.notePlace.frame.origin.y )
-                        scrollView.setContentOffset(scrollPoint, animated: true)
-                if let view = scrollView.viewWithTag(321) {
-                    print(view.frame.height)
+    func keyboardWillChangeFrameNotification(notification: NSNotification) {
+        let n = KeyboardNotification(notification)
+        let keyboardFrame = n.frameEndForView(self.view)
+        let animationDuration = n.animationDuration
+        let animationCurve = n.animationCurve
+        let viewFrame = self.view.frame
+        let newBottomOffset = viewFrame.maxY - keyboardFrame.minY
+        print("newBottomOffset is \(newBottomOffset)")
+        self.view.layoutIfNeeded()
+        self.scrollView.scrollRectToVisible(CGRectMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height, 1, 1), animated: true)
+        UIView.animateWithDuration(animationDuration,
+               delay: 0,
+               options: UIViewAnimationOptions(rawValue: UInt(animationCurve << 16)),
+               animations: {
+                if newBottomOffset > 0 {
+                    // Keyboard will show
+                    self.bottomConstraint.constant = newBottomOffset - 44
                 }
-            }
-            isKeybroad = true
-        }
-    }
-    
-    func keyboardWillHide(notification: NSNotification) {
-        if isKeybroad == true {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-                self.scrollView.frame.size.height += keyboardSize.height
-                let scrollPoint = CGPointMake(0, self.scrollView.frame.origin.y )
-                scrollView.setContentOffset(scrollPoint, animated: true)
-                if let view = scrollView.viewWithTag(321) {
-                    print(view.frame.height)
+                else {
+                    // keyboard will hide
+                    self.bottomConstraint.constant = 0
                 }
-            }
-            isKeybroad = false
-        }
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showScrollview" {
-            if let vc = segue.destinationViewController as? ScrollViewController {
-                vc.imageArray = tempImage
-                vc.indext = index
-            }
-        }
+                self.view.layoutIfNeeded()
+            },
+               completion: nil
+        )
     }
     
     func interstitialDidFailToReceiveAdWithError(interstitial: GADInterstitial,
@@ -749,9 +612,55 @@ class PlaceViewController: UIViewController, HSDatePickerViewControllerDelegate,
     }
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let userLocation: CLLocation = locations[0]
-        let location = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
+        _ = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
 //        locationManager.location = location
         print(locationManager.location)
+    }
+    
+    func loadFirstPhotoForPlace(placeID: String) {
+        GMSPlacesClient.sharedClient().lookUpPhotosForPlaceID(placeID) { (photos, error) -> Void in
+            if let error = error {
+                print("Error: \(error.description)")
+            } else {
+                if let firstPhoto = photos?.results.first {
+                    self.loadImageForMetadata(firstPhoto)
+                }
+                else {
+                    let alert = UIAlertController(title: "Search Image", message: "Don't have image for this place", preferredStyle: .Alert)
+                    let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+                    alert.addAction(action)
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    self.imageView.image = UIImage(named: "cover")
+                }
+            }
+        }
+    }
+    
+    func loadImageForMetadata(photoMetadata: GMSPlacePhotoMetadata) {
+        GMSPlacesClient.sharedClient()
+            .loadPlacePhoto(photoMetadata, constrainedToSize: imageView.bounds.size,
+                            scale: self.imageView.window!.screen.scale) { (photo, error) -> Void in
+                                if let error = error {
+                                    // TODO: handle the error.
+                                    print("Error: \(error.description)")
+                                    
+                                } else {
+                                    self.imageView.image = photo;
+                                    self.imgPlace = photo
+                                }
+        }
+    }
+    
+    //# MARK: - remove all sub view from scroll view
+    func clearScrollView() {
+        for view in self.imagesScrollView.subviews {
+            view.removeFromSuperview()
+        }
+    }
+    
+    func hsDatePickerPickedDate(date: NSDate!) {
+        dateVisit = date
+        addPlaceDate.setTitle(kDateYYMMDD.stringFromDate(date), forState: .Normal)
     }
   
 }

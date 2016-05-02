@@ -22,6 +22,7 @@
 		D0CDC11A1CBBE26A00651C5D /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CDC1191CBBE26A00651C5D /* FavoriteViewController.swift */; };
 		D0DE89441CCE58F70015B401 /* PlacesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE89431CCE58F70015B401 /* PlacesTableViewCell.swift */; };
 		D0DE89481CCE624E0015B401 /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE89471CCE624E0015B401 /* FavoriteTableViewCell.swift */; };
+		F8B3413F1CD70DE900526B41 /* KeyboardNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B3413E1CD70DE900526B41 /* KeyboardNotification.swift */; };
 		F8C8504D1CC1E16000B9ABFE /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C850491CC1E16000B9ABFE /* Extension.swift */; };
 		F8C8504E1CC1E16000B9ABFE /* FAIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C8504A1CC1E16000B9ABFE /* FAIcon.swift */; };
 		F8C8504F1CC1E16000B9ABFE /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8C8504B1CC1E16000B9ABFE /* FontAwesome.ttf */; };
@@ -54,6 +55,7 @@
 		D0DE89431CCE58F70015B401 /* PlacesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesTableViewCell.swift; sourceTree = "<group>"; };
 		D0DE89471CCE624E0015B401 /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
 		D960ADD6174AEE876F50FDF2 /* Pods_Travel_Sticky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Travel_Sticky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8B3413E1CD70DE900526B41 /* KeyboardNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardNotification.swift; sourceTree = "<group>"; };
 		F8C850491CC1E16000B9ABFE /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		F8C8504A1CC1E16000B9ABFE /* FAIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAIcon.swift; sourceTree = "<group>"; };
 		F8C8504B1CC1E16000B9ABFE /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 		F8C850481CC1E0A000B9ABFE /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				F8B3413E1CD70DE900526B41 /* KeyboardNotification.swift */,
 				84841EF71CD50494009FA0DC /* TestFairy.h */,
 				F8C850561CC210EE00B9ABFE /* AnimationButton.swift */,
 				D0D25C211CCA18DE00724CE4 /* Travel Sticky-Bridging-Header.h */,
@@ -372,6 +375,7 @@
 				D0DE89441CCE58F70015B401 /* PlacesTableViewCell.swift in Sources */,
 				D0BCD7CA1CBB456500931420 /* AppDelegate.swift in Sources */,
 				F8C850531CC1E1DA00B9ABFE /* Config.swift in Sources */,
+				F8B3413F1CD70DE900526B41 /* KeyboardNotification.swift in Sources */,
 				D03DF82E1CBFD21300E77401 /* Place.swift in Sources */,
 				F8C8504E1CC1E16000B9ABFE /* FAIcon.swift in Sources */,
 			);
@@ -499,7 +503,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesimplestudio.travelsticky;
 				PRODUCT_NAME = "Travel Sticky";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ff9acad4-fdc0-4cb8-a491-2ae1ea31975d";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mini-Project/Travel Sticky-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -523,7 +527,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesimplestudio.travelsticky;
 				PRODUCT_NAME = "Travel Sticky";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ff9acad4-fdc0-4cb8-a491-2ae1ea31975d";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mini-Project/Travel Sticky-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

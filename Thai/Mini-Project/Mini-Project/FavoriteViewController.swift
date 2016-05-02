@@ -63,7 +63,7 @@ class FavoriteViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            let moc = appDelegate.managedObjectContext
+            let _ = appDelegate.managedObjectContext
             places[indexPath.row].favorite = false
             places.removeAtIndex(indexPath.row)
             favoriteTableView.reloadData()
